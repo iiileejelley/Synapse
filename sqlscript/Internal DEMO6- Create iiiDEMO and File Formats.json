@@ -1,0 +1,20 @@
+{
+	"name": "Internal DEMO6- Create iiiDEMO and File Formats",
+	"properties": {
+		"description": "Creates a link to an ADL storage account at the powerbi container and Police Subfolder level",
+		"folder": {
+			"name": "Internal Demo Scripts/Serverless SQL 2 - External Tables"
+		},
+		"content": {
+			"query": "\n\n--Create iiiDEMO Schema---\nGO\n\nCREATE SCHEMA iii_DEMO\nGO\n\n\n--Creates the external file formats for the database, this is used when querying and creating external tables. \n-- This defines how to handle the file, which characters are field terminators, string delimiters and if the file has headers  \n\nCREATE EXTERNAL FILE FORMAT QuotedCsvWithHeader\nWITH (  \n    FORMAT_TYPE = DELIMITEDTEXT,\n    FORMAT_OPTIONS (\n        FIELD_TERMINATOR = ',',\n        STRING_DELIMITER = '\"',\n        FIRST_ROW = 2\n    )\n);\nGO\nCREATE EXTERNAL FILE FORMAT QuotedCsvWithoutHeader\nWITH (  \n    FORMAT_TYPE = DELIMITEDTEXT,\n    FORMAT_OPTIONS (\n        FIELD_TERMINATOR = ',',\n        STRING_DELIMITER = '\"',\n        FIRST_ROW = 1\n    )\n);\nGO\nCREATE EXTERNAL FILE FORMAT NativeParquet\nWITH (  \n    FORMAT_TYPE = PARQUET\n);\nGO\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"poolName": "Built-in",
+				"databaseName": "iii_DEMO"
+			}
+		},
+		"type": "SqlQuery"
+	}
+}

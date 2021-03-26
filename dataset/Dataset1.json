@@ -1,0 +1,19 @@
+{
+	"name": "Dataset1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "syanpsetewplay-WorkspaceDefaultSqlServer",
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"DBName": "iiisynapseplay"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlDWTable",
+		"schema": [],
+		"typeProperties": {
+			"tableName": "dbo.ExternalTable"
+		}
+	},
+	"type": "Microsoft.Synapse/workspaces/datasets"
+}

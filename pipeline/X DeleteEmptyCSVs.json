@@ -1,0 +1,140 @@
+{
+	"name": "X DeleteEmptyCSVs",
+	"properties": {
+		"activities": [
+			{
+				"name": "If Rows Equal 0",
+				"type": "IfCondition",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@equals(pipeline().parameters.NumberOfRows,0)",
+						"type": "Expression"
+					},
+					"ifFalseActivities": [
+						{
+							"name": "LogSuccess",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "DelimitedTextSource",
+									"storeSettings": {
+										"type": "AzureBlobFSReadSettings",
+										"recursive": true
+									},
+									"formatSettings": {
+										"type": "DelimitedTextReadSettings"
+									}
+								},
+								"sink": {
+									"type": "DelimitedTextSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									},
+									"formatSettings": {
+										"type": "DelimitedTextWriteSettings",
+										"quoteAllText": true,
+										"fileExtension": ".txt"
+									}
+								},
+								"enableStaging": false
+							},
+							"inputs": [
+								{
+									"referenceName": "DataLakeCsv",
+									"type": "DatasetReference",
+									"parameters": {
+										"Directory": {
+											"value": "@pipeline().parameters.Directory",
+											"type": "Expression"
+										},
+										"File": "iDAPSystemFiles/LogDate.csv"
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "DataLakeCsv",
+									"type": "DatasetReference",
+									"parameters": {
+										"Directory": {
+											"value": "@pipeline().parameters.Directory",
+											"type": "Expression"
+										},
+										"File": {
+											"value": "iDAPSystemFiles/@{substring(pipeline().parameters.File,0,indexof(pipeline().parameters.File,'/'))}@{substring(pipeline().parameters.File,lastindexof(pipeline().parameters.File,'/'),sub(lastindexof(pipeline().parameters.File,'.'),lastindexof(pipeline().parameters.File,'/')))}.csv",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					],
+					"ifTrueActivities": [
+						{
+							"name": "XDeleteEmptyFile",
+							"type": "Delete",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"dataset": {
+									"referenceName": "DataLakeCsv",
+									"type": "DatasetReference",
+									"parameters": {
+										"Directory": {
+											"value": "@pipeline().parameters.Directory",
+											"type": "Expression"
+										},
+										"File": {
+											"value": "@pipeline().parameters.File",
+											"type": "Expression"
+										}
+									}
+								},
+								"enableLogging": false,
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true
+								}
+							}
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"NumberOfRows": {
+				"type": "Int"
+			},
+			"File": {
+				"type": "String"
+			},
+			"Directory": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "DeleteEmptyFiles"
+		},
+		"annotations": [],
+		"lastPublishTime": "2020-08-14T10:21:10Z"
+	},
+	"type": "Microsoft.Synapse/workspaces/pipelines"
+}

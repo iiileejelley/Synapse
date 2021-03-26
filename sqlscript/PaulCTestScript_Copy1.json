@@ -1,0 +1,19 @@
+{
+	"name": "PaulCTestScript_Copy1",
+	"properties": {
+		"folder": {
+			"name": "Misc"
+		},
+		"content": {
+			"query": "-- https://docs.microsoft.com/en-us/azure/synapse-analytics/sql/develop-openrowset\n-- https://docs.microsoft.com/en-us/azure/synapse-analytics/sql/query-single-csv-file?toc=/azure/synapse-analytics/toc.json&bc=/azure/synapse-analytics/breadcrumb/toc.json\n\nCREATE EXTERNAL TABLE [dbo].[Street] WITH (\n        LOCATION = 'Street/',\n        DATA_SOURCE = [LeeDataLake],\n        FILE_FORMAT = [QuotedCsvWithHeader]\n) AS \nselect *\nfrom openrowset(\n    bulk 'https://iiileedlgen2test.blob.core.windows.net/powerbi/Police/NonSensitive/2020/*/*/street.csv',\n    format = 'csv',\n    parser_version = '2.0',\n    firstrow = 2 ) \nWITH (\n    \n    [Crime ID] VARCHAR(200) COLLATE Latin1_General_BIN2 1,\n    [Month] VARCHAR(200) 2,\n    [Crime] VARCHAR(200) 3\n)\nas rows\n\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"name": "POLICE",
+				"type": "SqlOnDemand"
+			}
+		},
+		"type": "SqlQuery"
+	}
+}

@@ -1,0 +1,19 @@
+{
+	"name": "RTC - Create Vehicles Dimension",
+	"properties": {
+		"folder": {
+			"name": "Dedicated SQL POOL"
+		},
+		"content": {
+			"query": "--DROP  TABLE [RTC].[DIM_Accidents]\nCREATE TABLE [RTC].[DIM_Accidents]\nWITH\n(\n    DISTRIBUTION = HASH (Acc_Index),\n    CLUSTERED COLUMNSTORE INDEX\n) AS SELECT  Acc_Index,\nvt.[label] as 'Vehicle Type' ,\nta.[label] as 'Towing and Articulation' ,\nvm.[label] as 'Vehicle Manoeuvre' ,\nvl.[label] as 'Vehicle Location - Restricted Lane' ,\njl.[label] as 'Junction Location' ,\nso.[label] as 'Skidding andOverturning' ,\nho.[label] as 'Hit Object in Carriageway' ,\nvl.[label] as 'Vehicle Leaving Carriageway' ,\nhoc.[label] as 'Hit Object off Carriageway' ,\n[1st_Point_of_Impact] as '1st Point of Impact' ,\nwv.[label] as 'Was Vehicle Left Hand Drive' ,\njp.[label] as 'Journey Purpose' ,\nsd.[label] as 'Sex of Driver' ,\n[Age_of_Driver] as 'Age of Driver' ,\nab.[label] as 'Age_Band of Driver' ,\n[Engine_Capacity_(CC)] as 'Engine Capacity (CC)' ,\npc.[label] as 'Propulsion Code' ,\n[Age_of_Vehicle] as 'Age of Vehicle' ,\ndd.[label] as 'Driver IMD Decile' ,\ndh.[label] as 'Driver Home Area_Type' ,\n[Vehicle_IMD_Decile] as 'Vehicle_IMD_Decile'\nFROM RTC.Vehicles as a \n LEFT OUTER JOIN RTC.[Vehicle_Type] vt ON vt.code = a.[Vehicle_Type]\n LEFT OUTER JOIN RTC.[Towing_and_Articulation] ta ON ta.code = a.[Towing_and_Articulation]\n LEFT OUTER JOIN RTC.[Vehicle_Manoeuvre] vm ON vm.code = a.[Vehicle_Manoeuvre]\n LEFT OUTER JOIN RTC.[Vehicle_Location] vl ON vl.code = a.[Vehicle_Location-Restricted_Lane]\n LEFT OUTER JOIN RTC.[Junction_Location] jl ON jl.code = a.[Junction_Location]\n LEFT OUTER JOIN RTC.[Skidding_and_Overturning] so ON so.code = a.[Skidding_and_Overturning]\n LEFT OUTER JOIN RTC.[Hit_Object_in_Carriageway] ho ON ho.code = a.[Hit_Object_in_Carriageway]\n LEFT OUTER JOIN RTC.[Veh_Leaving_Carriageway] vlc ON vlc.code = a.[Vehicle_Leaving_Carriageway]\n LEFT OUTER JOIN RTC.[Hit_Object_off_Carriageway] hoc ON hoc.code = a.[Hit_Object_off_Carriageway]\n --LEFT OUTER JOIN RTC.[1st_Point_of_Impact] im ON im.code = a.[1st_Point_of_Impact]\n LEFT OUTER JOIN RTC.[Was_Vehicle_Left_Hand_Drive] wv ON wv.code = a.[Was_Vehicle_Left_Hand_Drive]\n LEFT OUTER JOIN RTC.[Journey_Purpose] jp ON jp.code = a.[Journey_Purpose_of_Driver]\n LEFT OUTER JOIN RTC.[Sex_of_Driver] sd ON sd.code = a.[Sex_of_Driver]\n LEFT OUTER JOIN RTC.[Age_Band] ab ON ab.code = a.[Age_Band_of_Driver]\n --LEFT OUTER JOIN RTC.[Engine_Capacity_(CC)] ec ON ec.code = a.[Engine_Capacity_(CC)]\n LEFT OUTER JOIN RTC.[Vehicle_Propulsion_Code] pc ON pc.code = a.[Propulsion_Code]\n --LEFT OUTER JOIN RTC.[Age_of_Vehicle] av ON av.code = a.[Age_of_Vehicle]\n LEFT OUTER JOIN RTC.[IMD_Decile] dd ON dd.code = a.[Driver_IMD_Decile]\n LEFT OUTER JOIN RTC.[Home_Area_Type] dh ON dh.code = a.[Driver_Home_Area_Type]\n WHERE Acc_Index NOT LIKE '#'\n ",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"name": "master",
+				"type": "SqlOnDemand"
+			}
+		},
+		"type": "SqlQuery"
+	}
+}

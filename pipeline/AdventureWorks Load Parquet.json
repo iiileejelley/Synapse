@@ -1,0 +1,720 @@
+{
+	"name": "AdventureWorks Load Parquet",
+	"properties": {
+		"description": "Version 3",
+		"activities": [
+			{
+				"name": "ForEachNonDelta",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "FilterNonDelta",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('FilterNonDelta').output.value",
+						"type": "Expression"
+					},
+					"batchCount": 6,
+					"activities": [
+						{
+							"name": "Copy Non Delta",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "SqlServerSource",
+									"sqlReaderQuery": {
+										"value": "@item().SQL",
+										"type": "Expression"
+									},
+									"partitionOption": "None"
+								},
+								"sink": {
+									"type": "ParquetSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									},
+									"formatSettings": {
+										"type": "ParquetWriteSettings"
+									}
+								},
+								"enableStaging": false
+							},
+							"inputs": [
+								{
+									"referenceName": "AdventureWorks",
+									"type": "DatasetReference"
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "DataLakeParquet",
+									"type": "DatasetReference",
+									"parameters": {
+										"Directory": {
+											"value": "@pipeline().parameters.Directory",
+											"type": "Expression"
+										},
+										"File": {
+											"value": "@{item().SensitiveStatus}/DailyLoads/@{item().TableName}.parquet",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						},
+						{
+							"name": "Log Non Delta Success",
+							"type": "Copy",
+							"dependsOn": [
+								{
+									"activity": "Copy Non Delta",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "DelimitedTextSource",
+									"storeSettings": {
+										"type": "AzureBlobFSReadSettings",
+										"recursive": true
+									},
+									"formatSettings": {
+										"type": "DelimitedTextReadSettings"
+									}
+								},
+								"sink": {
+									"type": "ParquetSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									},
+									"formatSettings": {
+										"type": "ParquetWriteSettings"
+									}
+								},
+								"enableStaging": false
+							},
+							"inputs": [
+								{
+									"referenceName": "DataLakeParquet",
+									"type": "DatasetReference",
+									"parameters": {
+										"Directory": {
+											"value": "@pipeline().parameters.Directory",
+											"type": "Expression"
+										},
+										"File": "iDAPSystemFiles/LogDate.parquet"
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "DataLakeParquet",
+									"type": "DatasetReference",
+									"parameters": {
+										"Directory": {
+											"value": "@pipeline().parameters.Directory",
+											"type": "Expression"
+										},
+										"File": {
+											"value": "iDAPSystemFiles/@{item().SensitiveStatus}/Daily/@{item().TableName}.parquet",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						},
+						{
+							"name": "Log Non Delta Failure",
+							"type": "Copy",
+							"dependsOn": [
+								{
+									"activity": "Copy Non Delta",
+									"dependencyConditions": [
+										"Failed"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "DelimitedTextSource",
+									"storeSettings": {
+										"type": "AzureBlobFSReadSettings",
+										"recursive": true
+									},
+									"formatSettings": {
+										"type": "DelimitedTextReadSettings"
+									}
+								},
+								"sink": {
+									"type": "ParquetSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									},
+									"formatSettings": {
+										"type": "ParquetWriteSettings"
+									}
+								},
+								"enableStaging": false
+							},
+							"inputs": [
+								{
+									"referenceName": "DataLakeParquet",
+									"type": "DatasetReference",
+									"parameters": {
+										"Directory": {
+											"value": "@pipeline().parameters.Directory",
+											"type": "Expression"
+										},
+										"File": "iDAPSystemFiles/LogDate.parquet"
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "DataLakeParquet",
+									"type": "DatasetReference",
+									"parameters": {
+										"Directory": {
+											"value": "@pipeline().parameters.Directory",
+											"type": "Expression"
+										},
+										"File": {
+											"value": "iDAPSystemFiles/Failed/Daily/@{item().SensitiveStatus}/@{item().TableName}.parquet",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					]
+				}
+			},
+			{
+				"name": "Set today",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "Vtoday",
+					"value": {
+						"value": "@formatDateTime(if(equals(toLower(pipeline().parameters.EndDate),'none'),pipeline().TriggerTime,pipeline().parameters.EndDate),'yyyy-MM-dd')",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Look up Table Data",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Test Connection",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"dataset": {
+						"referenceName": "DataLakeCsv",
+						"type": "DatasetReference",
+						"parameters": {
+							"File": {
+								"value": "@pipeline().parameters.tableLoadURL",
+								"type": "Expression"
+							},
+							"Directory": {
+								"value": "@pipeline().parameters.Directory",
+								"type": "Expression"
+							}
+						}
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "FilterDeltas",
+				"type": "Filter",
+				"dependsOn": [
+					{
+						"activity": "Look up Table Data",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Look up Table Data').output.value",
+						"type": "Expression"
+					},
+					"condition": {
+						"value": "@equals(item().DeltaStatus,'Delta')",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "ForEachDelta",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "FilterDeltas",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('FilterDeltas').output.value",
+						"type": "Expression"
+					},
+					"batchCount": 6,
+					"activities": [
+						{
+							"name": "Does Table Exist in Data Lake",
+							"type": "GetMetadata",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"dataset": {
+									"referenceName": "DataLakeParquet",
+									"type": "DatasetReference",
+									"parameters": {
+										"Directory": {
+											"value": "@pipeline().parameters.Directory",
+											"type": "Expression"
+										},
+										"File": {
+											"value": "iDAPSystemFiles/@{item().SensitiveStatus}/@{item().TableName}.parquet",
+											"type": "Expression"
+										}
+									}
+								},
+								"fieldList": [
+									"exists"
+								],
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							}
+						},
+						{
+							"name": "If Doesnt Exist Run Yearly",
+							"type": "IfCondition",
+							"dependsOn": [
+								{
+									"activity": "Does Table Exist in Data Lake",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"expression": {
+									"value": "@activity('Does Table Exist in Data Lake').output.exists",
+									"type": "Expression"
+								},
+								"ifTrueActivities": [
+									{
+										"name": "Lookup last run date",
+										"type": "Lookup",
+										"dependsOn": [],
+										"policy": {
+											"timeout": "7.00:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"source": {
+												"type": "DelimitedTextSource",
+												"storeSettings": {
+													"type": "AzureBlobFSReadSettings",
+													"recursive": true
+												},
+												"formatSettings": {
+													"type": "DelimitedTextReadSettings"
+												}
+											},
+											"dataset": {
+												"referenceName": "DataLakeParquet",
+												"type": "DatasetReference",
+												"parameters": {
+													"Directory": {
+														"value": "@pipeline().parameters.Directory",
+														"type": "Expression"
+													},
+													"File": {
+														"value": "iDAPSystemFiles/@{item().SensitiveStatus}/@{item().TableName}.parquet",
+														"type": "Expression"
+													}
+												}
+											}
+										}
+									}
+								]
+							}
+						},
+						{
+							"name": "Yearly Daily or end",
+							"type": "Switch",
+							"dependsOn": [
+								{
+									"activity": "If Doesnt Exist Run Yearly",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"on": {
+									"value": "@if(not(activity('Does Table Exist in Data Lake').output.exists),'year',if(less(formatDateTime(if(equals(toLower(pipeline().parameters.StartDate),'none'),activity('Lookup last run date').output.firstRow.endDate,pipeline().parameters.StartDate),'yyyyMMdd'),\nformatDateTime(if(equals(toLower(pipeline().parameters.EndDate),'none'),variables('Vtoday'),pipeline().parameters.EndDate),'yyyyMMdd')),'daily','other'))",
+									"type": "Expression"
+								},
+								"cases": [
+									{
+										"value": "year",
+										"activities": [
+											{
+												"name": "Execute X Run",
+												"type": "ExecutePipeline",
+												"dependsOn": [],
+												"userProperties": [],
+												"typeProperties": {
+													"pipeline": {
+														"referenceName": "X AdventureWorks Load Parquet",
+														"type": "PipelineReference"
+													},
+													"waitOnCompletion": true,
+													"parameters": {
+														"StartDate": {
+															"value": "@pipeline().parameters.BulkStartDate",
+															"type": "Expression"
+														},
+														"SensitiveStatus": {
+															"value": "@item().SensitiveStatus",
+															"type": "Expression"
+														},
+														"TableName": {
+															"value": "@item().TableName",
+															"type": "Expression"
+														},
+														"Directory": {
+															"value": "@pipeline().parameters.Directory",
+															"type": "Expression"
+														},
+														"SQLQuery": {
+															"value": "@item().SQL",
+															"type": "Expression"
+														},
+														"today": {
+															"value": "@variables('Vtoday')",
+															"type": "Expression"
+														},
+														"WhereAlt": {
+															"value": "@item().WhereAlt",
+															"type": "Expression"
+														},
+														"LessThanWhere": {
+															"value": "@item().WhereLowerThan",
+															"type": "Expression"
+														},
+														"nullWhere": {
+															"value": "@item().WhereNull",
+															"type": "Expression"
+														}
+													}
+												}
+											}
+										]
+									},
+									{
+										"value": "daily",
+										"activities": [
+											{
+												"name": "Copy delta",
+												"type": "Copy",
+												"dependsOn": [],
+												"policy": {
+													"timeout": "7.00:00:00",
+													"retry": 0,
+													"retryIntervalInSeconds": 30,
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"source": {
+														"type": "SqlServerSource",
+														"sqlReaderQuery": {
+															"value": "@{item().SQL} @{replace(replace(item().Where,'IDBAPsDate',formatDateTime(if(equals(toLower(pipeline().parameters.StartDate),'none'),activity('Lookup last run date').output.firstRow.endDate,pipeline().parameters.StartDate),'yyyyMMdd')),'IDBAPeDate',formatDateTime(variables('Vtoday'),'yyyyMMdd'))}",
+															"type": "Expression"
+														},
+														"queryTimeout": "02:00:00",
+														"partitionOption": "None"
+													},
+													"sink": {
+														"type": "ParquetSink",
+														"storeSettings": {
+															"type": "AzureBlobFSWriteSettings"
+														},
+														"formatSettings": {
+															"type": "ParquetWriteSettings"
+														}
+													},
+													"enableStaging": false
+												},
+												"inputs": [
+													{
+														"referenceName": "AdventureWorks",
+														"type": "DatasetReference"
+													}
+												],
+												"outputs": [
+													{
+														"referenceName": "DataLakeParquet",
+														"type": "DatasetReference",
+														"parameters": {
+															"Directory": {
+																"value": "@pipeline().parameters.Directory",
+																"type": "Expression"
+															},
+															"File": {
+																"value": "@{item().SensitiveStatus}/@{replace(formatDateTime(if(equals(toLower(pipeline().parameters.StartDate),'none'),activity('Lookup last run date').output.firstRow.endDate,pipeline().parameters.StartDate),'yyyy-MM-dd'),'-','/')}/@{item().TableName}.parquet",
+																"type": "Expression"
+															}
+														}
+													}
+												]
+											},
+											{
+												"name": "Execute Delete",
+												"type": "ExecutePipeline",
+												"dependsOn": [
+													{
+														"activity": "Copy delta",
+														"dependencyConditions": [
+															"Succeeded"
+														]
+													}
+												],
+												"userProperties": [],
+												"typeProperties": {
+													"pipeline": {
+														"referenceName": "X DeleteEmptyCSVs",
+														"type": "PipelineReference"
+													},
+													"waitOnCompletion": true,
+													"parameters": {
+														"NumberOfRows": {
+															"value": "@activity('Copy delta').output.rowsCopied",
+															"type": "Expression"
+														},
+														"File": {
+															"value": "@{item().SensitiveStatus}/@{replace(formatDateTime(if(equals(toLower(pipeline().parameters.StartDate),'none'),activity('Lookup last run date').output.firstRow.endDate,pipeline().parameters.StartDate),'yyyy-MM-dd'),'-','/')}/@{item().TableName}.parquet",
+															"type": "Expression"
+														},
+														"Directory": {
+															"value": "@pipeline().parameters.Directory",
+															"type": "Expression"
+														}
+													}
+												}
+											}
+										]
+									}
+								]
+							}
+						}
+					]
+				}
+			},
+			{
+				"name": "FilterNonDelta",
+				"type": "Filter",
+				"dependsOn": [
+					{
+						"activity": "ForEachDelta",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Look up Table Data').output.value",
+						"type": "Expression"
+					},
+					"condition": {
+						"value": "@equals(item().DeltaStatus,'NonDelta')",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Test Connection",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Set today",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": {
+							"value": "Select '@{variables('Vtoday')}' as endDate",
+							"type": "Expression"
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "ParquetSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "ParquetWriteSettings"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "AdventureWorks",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DataLakeParquet",
+						"type": "DatasetReference",
+						"parameters": {
+							"Directory": {
+								"value": "@pipeline().parameters.Directory",
+								"type": "Expression"
+							},
+							"File": "iDAPSystemFiles/LogDate.parquet"
+						}
+					}
+				]
+			}
+		],
+		"parameters": {
+			"Directory": {
+				"type": "string",
+				"defaultValue": "iii/AdventureWorksParquet"
+			},
+			"EndDate": {
+				"type": "string",
+				"defaultValue": "None"
+			},
+			"BulkStartDate": {
+				"type": "string",
+				"defaultValue": "2005-01-01"
+			},
+			"StartDate": {
+				"type": "string",
+				"defaultValue": "None"
+			},
+			"tableLoadURL": {
+				"type": "string",
+				"defaultValue": "iDAPConfigFiles/tableLoadAdventureWorks.csv"
+			}
+		},
+		"variables": {
+			"Vtoday": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "AdventureWorks/Parquet"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-03-04T14:48:37Z"
+	},
+	"type": "Microsoft.Synapse/workspaces/pipelines"
+}

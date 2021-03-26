@@ -1,0 +1,19 @@
+{
+	"name": "RTC DEMO - Create External and Normal Table",
+	"properties": {
+		"folder": {
+			"name": "Dedicated SQL POOL"
+		},
+		"content": {
+			"query": "IF EXISTS(\nSELECT * FROM INFORMATION_SCHEMA.TABLES \nwhere TABLE_NAME = 'Ext_1st_Road_Class' AND TABLE_SCHEMA = 'RTC')\n\n    DROP EXTERNAL TABLE [RTC].[Ext_1st_Road_Class];\nCREATE EXTERNAL TABLE [RTC].[Ext_1st_Road_Class]\n(\n\t [code] INT NOT NULL,\n\t [label] VARCHAR(300)\n)\nWITH\n(\n\tLOCATION = '/RTC/NonSensitive/DailyLoads/1st Road Class.csv',\n\tDATA_SOURCE = [RTC],\n\tFILE_FORMAT = [CCSV]\n)\nDROP TABLE [RTC].[1st_Road_Class]\nCREATE TABLE [RTC].[1st_Road_Class] \nWITH\n(\n\n    CLUSTERED COLUMNSTORE INDEX,\n    DISTRIBUTION = HASH([code]))\nAS SELECT * FROM [RTC].[Ext_1st_Road_Class]\n\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"name": "iiisynapseplay",
+				"type": "SqlPool"
+			}
+		},
+		"type": "SqlQuery"
+	}
+}

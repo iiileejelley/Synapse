@@ -1,0 +1,19 @@
+{
+	"name": "RTC DEMO -Date DIM",
+	"properties": {
+		"folder": {
+			"name": "Dedicated SQL POOL"
+		},
+		"content": {
+			"query": "--DROP  TABLE [RTC].[DIM_Date]\nCREATE TABLE [RTC].[DIM_Date]\nWITH\n(\n    DISTRIBUTION = HASH ([Date]),\n    CLUSTERED COLUMNSTORE INDEX\n) AS \nselect TOP (10) DISTINCT Date,\nCONCAT(YEAR([Date]), '-' ,MONTH([Date]), '-', DAY([Date])) 'DateKey',\nYEAR([Date]) as 'Year', \nMONTH([Date]) as 'Month',\nDAY([Date]) as 'Day',\n       CASE\n         WHEN MONTH([Date]) < 4 THEN 'Q1'\n         WHEN MONTH([Date]) < 7 THEN 'Q2'\n         WHEN MONTH([Date]) < 10 THEN 'Q3'\n         ELSE 'Q4'\n       END AS 'Quarter'\nfrom rtc.Stg_Accidents \n\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"name": "iiisynapseplay",
+				"type": "SqlPool"
+			}
+		},
+		"type": "SqlQuery"
+	}
+}

@@ -1,0 +1,19 @@
+{
+	"name": "SourceDataset_x3o",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ADLGen2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "Police",
+				"fileSystem": "powerbi"
+			}
+		}
+	},
+	"type": "Microsoft.Synapse/workspaces/datasets"
+}

@@ -1,0 +1,19 @@
+{
+	"name": "Internal DEMO14 - Use file metadata in queries",
+	"properties": {
+		"folder": {
+			"name": "Internal Demo Scripts/Serverless SQL 4 -  Using Metadata"
+		},
+		"content": {
+			"query": "\n/* The following script reads NonSenstive  delta files for 2020. It returns the number of rows per file path. */\nSELECT\n    r.filepath() AS filepath\n    ,COUNT_BIG(*) AS [rows]\nFROM OPENROWSET(\n    BULK 'https://iiiplaytestgen2.dfs.core.windows.net/powerbi/Police/NonSensitive/2020/01/*/*.csv',\n    FORMAT = 'CSV',\n    PARSER_VERSION = '2.0',\n    FIRSTROW = 2\n    ) as r\nGROUP BY\n    r.filepath()\nORDER BY\n    filepath;\n\n/* The following example shows how filepath() can be used in the WHERE clause to filter the files to be read*/\nSELECT\n    r.filepath() AS filepath\n    ,r.filepath(1) AS [month]\n    ,COUNT_BIG(*) AS [rows]\nFROM OPENROWSET(\n    BULK 'https://iiiplaytestgen2.dfs.core.windows.net/powerbi/Police/NonSensitive/2019/*/*/*street*.csv',\n    FORMAT = 'CSV',\n    PARSER_VERSION = '2.0',\n    FIRSTROW = 2\n    )\nWITH (\n    vendor_id INT\n) AS [r]\nWHERE\nr.filepath(1) IN ('10', '11', '12')\nGROUP BY\n    r.filepath()\n    ,r.filepath(1)\nORDER BY\n    filepath;\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"poolName": "Built-in",
+				"databaseName": "default"
+			}
+		},
+		"type": "SqlQuery"
+	}
+}

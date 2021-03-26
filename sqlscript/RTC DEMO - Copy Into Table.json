@@ -1,0 +1,20 @@
+{
+	"name": "RTC DEMO - Copy Into Table",
+	"properties": {
+		"description": "accepts wildcards but can;t be used to insert into an externla table",
+		"folder": {
+			"name": "Dedicated SQL POOL"
+		},
+		"content": {
+			"query": "\n\n\nCOPY INTO [RTC].[Weather]\n([code], [label]) \nFROM 'https://iiiplaytestgen2.dfs.core.windows.net/powerbi/RTC/*/*/Weather.csv'\nWITH  \n ( \n FILE_TYPE = 'CSV'\n,FIRSTROW = 2\n)\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"name": "iiisynapseplay",
+				"type": "SqlPool"
+			}
+		},
+		"type": "SqlQuery"
+	}
+}

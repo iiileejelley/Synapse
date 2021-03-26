@@ -1,0 +1,65 @@
+{
+	"name": "Police",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy data1",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "RestSource",
+						"httpRequestTimeout": "00:01:40",
+						"requestInterval": "00.00:00:00.010",
+						"requestMethod": "GET"
+					},
+					"sink": {
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".txt"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "Police_Lee",
+						"type": "DatasetReference",
+						"parameters": {
+							"rel_address": "crimes-street/all-crime?poly=51,-6:51,1.3:50.3,1.3:50,-6&date=2019-01"
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DataLakeCsv",
+						"type": "DatasetReference",
+						"parameters": {
+							"File": "TestLee2.csv",
+							"Directory": "Test"
+						}
+					}
+				]
+			}
+		],
+		"folder": {
+			"name": "Misc"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-03-04T14:47:01Z"
+	},
+	"type": "Microsoft.Synapse/workspaces/pipelines"
+}

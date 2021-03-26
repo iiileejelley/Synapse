@@ -1,0 +1,16 @@
+{
+	"name": "Connection Test",
+	"properties": {
+		"content": {
+			"query": "-- https://docs.microsoft.com/en-us/azure/synapse-analytics/sql/develop-openrowset\n-- https://docs.microsoft.com/en-us/azure/synapse-analytics/sql/query-single-csv-file?toc=/azure/synapse-analytics/toc.json&bc=/azure/synapse-analytics/breadcrumb/toc.json\nselect *\nINTO TESTTABLE\nfrom openrowset(\n    bulk 'https://iiileedlgen2test.blob.core.windows.net/powerbi/Police/NonSensitive/2019/01/01/2019-01-wiltshire-street.csv',\n    format = 'csv',\n    parser_version = '2.0',\n    firstrow = 2 ) \nWITH (\n    \n    [Crime] VARCHAR(200) COLLATE Latin1_General_BIN2 10,\n    [Reported by] VARCHAR(200) 3,\n    [Crime ID] VARCHAR(200) 1\n)\nas rows\nWHERE [Crime] = 'Burglary'\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"name": "POLICE",
+				"type": "SqlOnDemand"
+			}
+		},
+		"type": "SqlQuery"
+	}
+}

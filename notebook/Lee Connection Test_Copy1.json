@@ -1,0 +1,179 @@
+{
+	"name": "Lee Connection Test_Copy1",
+	"properties": {
+		"nbformat": 4,
+		"nbformat_minor": 2,
+		"bigDataPool": {
+			"referenceName": "tewTest1",
+			"type": "BigDataPoolReference"
+		},
+		"sessionProperties": {
+			"driverMemory": "28g",
+			"driverCores": 4,
+			"executorMemory": "28g",
+			"executorCores": 4,
+			"numExecutors": 2
+		},
+		"metadata": {
+			"language_info": {
+				"name": "python"
+			},
+			"a365ComputeOptions": {
+				"id": "/subscriptions/bdcb8fa1-3596-4673-af7f-ad635ee9906d/resourceGroups/tim-play-rg1/providers/Microsoft.Synapse/workspaces/syanpsetewplay/bigDataPools/tewTest1",
+				"name": "tewTest1",
+				"type": "Spark",
+				"endpoint": "https://syanpsetewplay.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/tewTest1",
+				"auth": {
+					"type": "AAD",
+					"authResource": "https://dev.azuresynapse.net"
+				},
+				"sparkVersion": "2.4",
+				"nodeCount": 3,
+				"cores": 4,
+				"memory": 28
+			}
+		},
+		"cells": [
+			{
+				"cell_type": "markdown",
+				"source": [
+					"## Notebook Examples\n",
+					"https://github.com/Azure-Samples/Synapse/tree/master/Notebooks\n",
+					""
+				]
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"from pyspark.sql import SparkSession\n",
+					"from pyspark.sql.types import *\n",
+					"account_name = \"timplayadlsgen2\"\n",
+					"container_name = \"iii-idap\"\n",
+					"relative_path = \"PoliceAPI\"\n",
+					"adls_path = 'abfss://%s@%s.dfs.core.windows.net/%s' % (container_name, account_name, relative_path)\n",
+					"\n",
+					"spark.conf.set(\"fs.azure.account.auth.type.%s.dfs.core.windows.net\" %account_name, \"SharedKey\")\n",
+					"spark.conf.set(\"fs.azure.account.key.%s.dfs.core.windows.net\" %account_name ,\"aAsfAKRTt/tV+uNPMwKZpARpGp/CgFbBieWwRCP1qH7BcUC5IL1Hz/Dt3enbBaBpb1LOuaYNYImOEo8RDn34CQ==\")\n",
+					"\n",
+					""
+				],
+				"execution_count": 4
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"import os\n",
+					"import glob"
+				],
+				"execution_count": 21
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"os.mount"
+				],
+				"execution_count": 18
+			},
+			{
+				"cell_type": "code",
+				"source": [],
+				"execution_count": null
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"for x in glob.iglob('/*/*'):\n",
+					"    print(x)"
+				],
+				"execution_count": 16
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"df1 = spark.read.option('header', 'false') \\\n",
+					"                .option('delimiter', ',') \\\n",
+					"                .csv(adls_path + '/PoliceStops2020-06-17T19_53_03.6867380Z')"
+				],
+				"execution_count": 5
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"df1 = spark.read.csv(adls_path + '/PoliceStops2020-06-17T19_53_03.6867380Z', header=True, inferSchema=True)"
+				],
+				"execution_count": 8
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"df1.repartition(1).\\\n",
+					"write.format(\"com.databricks.spark.csv\").option(\"header\",\"true\").mode(\"overwrite\").save(adls_path + '/PoliceStops2020xxx.csv')"
+				],
+				"execution_count": 13
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"diagram": {
+						"activateDiagramType": 1,
+						"chartConfig": {
+							"category": "bar",
+							"keys": [
+								"category"
+							],
+							"values": [
+								"loc_latitude"
+							],
+							"yLabel": "loc_latitude",
+							"xLabel": "category",
+							"aggregation": "SUM",
+							"aggByBackend": false
+						},
+						"aggData": "{\"loc_latitude\":{\"anti-social-behaviour\":11736.50666900001,\"bicycle-theft\":1105.2765099999997,\"burglary\":2578.8826539999995,\"criminal-damage-arson\":3842.0374809999976,\"drugs\":3157.811104,\"other-crime\":1052.637729,\"other-theft\":2842.0420579999995,\"possession-of-weapons\":473.65159199999994,\"public-order\":7473.679826000002,\"robbery\":684.2014370000002,\"shoplifting\":1789.4560349999997,\"theft-from-the-person\":210.526714,\"vehicle-crime\":1631.605383,\"violent-crime\":12104.936495000005}}",
+						"isSummary": false,
+						"previewData": {
+							"filter": null
+						},
+						"isSql": false
+					}
+				},
+				"source": [
+					"display(df1)"
+				],
+				"execution_count": 6
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"%lsmagic"
+				],
+				"execution_count": 14
+			},
+			{
+				"cell_type": "markdown",
+				"source": [
+					"## Install Libraries\n",
+					"https://docs.microsoft.com/en-us/azure/synapse-analytics/spark/apache-spark-azure-portal-add-libraries\n",
+					""
+				]
+			},
+			{
+				"cell_type": "markdown",
+				"source": [
+					"## Suported Libraries\n",
+					"https://docs.microsoft.com/en-us/azure/synapse-analytics/spark/apache-spark-version-support\n",
+					""
+				]
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"import pip #needed to use the pip functions\n",
+					"for i in pip.get_installed_distributions(local_only=True):\n",
+					"    print(i)"
+				],
+				"execution_count": 4
+			}
+		]
+	}
+}

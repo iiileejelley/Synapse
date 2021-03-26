@@ -1,0 +1,24 @@
+{
+	"name": "RA_Police",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "RA_Police",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"Rel_URL": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "RestResource",
+		"typeProperties": {
+			"relativeUrl": {
+				"value": "@dataset().Rel_URL",
+				"type": "Expression"
+			}
+		},
+		"schema": []
+	},
+	"type": "Microsoft.Synapse/workspaces/datasets"
+}

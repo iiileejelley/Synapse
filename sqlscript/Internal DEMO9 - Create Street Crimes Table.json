@@ -1,0 +1,20 @@
+{
+	"name": "Internal DEMO9 - Create Street Crimes Table",
+	"properties": {
+		"description": "Creates a link to an ADL storage account at the powerbi container and Police Subfolder level",
+		"folder": {
+			"name": "Internal Demo Scripts/Serverless SQL 2 - External Tables"
+		},
+		"content": {
+			"query": "\nCREATE EXTERNAL TABLE [Street Crime] WITH (\n        LOCATION = 'StreetCrimes',\n        DATA_SOURCE = [DataLakePolice],\n        FILE_FORMAT = [QuotedCsvWithHeader]\n) AS \n--Select all burglary street crimes files in the 2020 Non Sensitive folders and define column types and names --\n    select *\nfrom openrowset(\n    bulk 'https://iiiplaytestgen2.blob.core.windows.net/powerbi/Police/NonSensitive/2020/01/*/*-street.csv',\n    format = 'csv',\n    parser_version = '2.0',\n    firstrow = 2 ) \n    WITH (\n    [Crime ID] VARCHAR(200) 1,\n    [Month] VARCHAR(8) 2,\n    [Reported By] VARCHAR(200) 4,\n    [Location] VARCHAR(200) 7,\n    [LSOA Name] VARCHAR(200) 9,\n    [Crime Type] VARCHAR(200) 10,\n    [Last Outcome] VARCHAR (200) 11\n) as Rows \nWHERE [Crime Type] = 'Burglary'\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"poolName": "Built-in",
+				"databaseName": "iii_DEMO"
+			}
+		},
+		"type": "SqlQuery"
+	}
+}

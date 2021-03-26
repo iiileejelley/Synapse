@@ -1,0 +1,19 @@
+{
+	"name": "RTC DEMO - Create Accidents Fact Table",
+	"properties": {
+		"folder": {
+			"name": "Dedicated SQL POOL"
+		},
+		"content": {
+			"query": "DROP  TABLE [RTC].[FACT_Accidents]\nCREATE TABLE [RTC].[FACT_Accidents]\nWITH\n(\n    DISTRIBUTION = HASH (Accident_Index),\n    CLUSTERED COLUMNSTORE INDEX\n) AS SELECT DISTINCT(Accident_Index),\nCONCAT(YEAR([Date]), '-' ,MONTH([Date]), '-', DAY([Date])) 'DateKey',\npf.[label] as 'Police Force',\nacs.[label] as 'Accident Severity',\nlad.[label] as 'Local Authority District',\nlah.[label] as 'Local Authority Highway' ,\nrd.[label] as '1st Road Class' ,\n--rn.[label] as '1st Road Number' ,\nrt.[label] as 'Road Type' ,\na.[Speed_Limit] ,\njd.[label] as 'Junction Detail' ,\njc.[label] as 'Junction Control' ,\nrc2.[label] as '2nd Road Class' ,\n--rn2.[label] as '2nd Road Number' ,\npch.[label] as 'Pedestrian Crossing - Human Control' ,\npcp.[label] as 'Pedestrian Crossing - Physical Facilities' ,\nlc.[label] as 'Light Conditions' ,\nwc.[label] as 'Weather Conditions' ,\nrs.[label] as 'Road Surface Conditions' ,\nsc.[label] as 'Special Conditions at Site' ,\nch.[label] as 'Carriageway Hazards' ,\nur.[label] as 'Urban or Rural Area' ,\ndpa.[label] as 'Did Police Officer Attend', \na.[LSOA_of_Accident_Location] as ' LSOA of Accident Location'\nFROM RTC.Accidents A\nLEFT OUTER JOIN RTC.Police_Force pf on pf.code = a.Police_Force\nLEFT OUTER JOIN RTC.Accident_Severity acs on acs.code = a.Accident_Severity\nLEFT OUTER JOIN RTC.[Local_Authority_(District)] lad on lad.code = a.[Local_Authority_(District)]\n  LEFT OUTER JOIN RTC.[Local_Authority_(Highway)] lah ON lah.code = a.[Local_Authority_(Highway)]\n LEFT OUTER JOIN RTC.[1st_Road_Class] rd ON rd.code = a.[1st_Road_Class]\n-- LEFT OUTER JOIN RTC.[1st_Road_Number] rn ON rn.code = a.[1st_Road_Number]\n LEFT OUTER JOIN RTC.[Road_Type] rt ON rt.code = a.Road_Type\n --LEFT OUTER JOIN RTC.[Speed_Limit] sl ON sl.code = a.Speed_Limit\n LEFT OUTER JOIN RTC.[Junction_Detail] jd ON jd.code = a.Junction_Detail\n LEFT OUTER JOIN RTC.[Junction_Control] jc ON jc.code = a.Junction_Control\n LEFT OUTER JOIN RTC.[2nd_Road_Class] rc2 ON rc2.code = a.[2nd_Road_Class]\n --LEFT OUTER JOIN RTC.[2nd_Road_Number] rn2 ON rn2.code = a.[2nd_Road_Number]\n LEFT OUTER JOIN RTC.[Ped_Cross_-_Human] pch ON pch.code = a.[Pedestrian_Crossing-Human_Control]\n LEFT OUTER JOIN RTC.[Ped_Cross_-_Physical] pcp ON pcp.code = a.[Pedestrian_Crossing-Physical_Facilities]\n LEFT OUTER JOIN RTC.[Light_Conditions] lc ON lc.code = a.Light_Conditions\n LEFT OUTER JOIN RTC.[Weather] wc ON wc.code = a.Weather_Conditions\n LEFT OUTER JOIN RTC.[Road_Surface] rs ON rs.code = a.Road_Surface_Conditions\n LEFT OUTER JOIN RTC.[Special_Conditions_at_Site] sc ON sc.code = a.Special_Conditions_at_Site\n LEFT OUTER JOIN RTC.[Carriageway_Hazards] ch ON ch.code = a.Carriageway_Hazards\n LEFT OUTER JOIN RTC.[Urban_Rural] ur ON ur.code = a.Urban_or_Rural_Area\n LEFT OUTER JOIN RTC.[Police_Officer_Attend] dpa ON dpa.code = a.Did_Police_Officer_Attend_Scene_of_Accident\n --LEFT OUTER JOIN RTC.[LSOA_of_Accident_Location] ls ON ls.code = a.LSOA_of_Accident_Location\nWHERE Accident_Index NOT LIKE '%#%'\nGO\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"poolName": "iiisynapseplay",
+				"databaseName": "iiisynapseplay"
+			}
+		},
+		"type": "SqlQuery"
+	}
+}

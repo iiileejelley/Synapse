@@ -1,0 +1,20 @@
+{
+	"name": "Internal DEMO13 - View Example",
+	"properties": {
+		"description": "Creates a link to an ADL storage account at the powerbi container and Police Subfolder level",
+		"folder": {
+			"name": "Internal Demo Scripts/Serverless SQL 3 - Views"
+		},
+		"content": {
+			"query": "\nCREATE VIEW [Load Test Files]\n AS \n\n--Select all avon and somerset outcomes files in the 2019 Non Sensitive folders and define column types and names --\nselect *\nfrom OPENROWSET(\n    bulk 'https://iiiplaytestgen2.blob.core.windows.net/powerbi/Police/Test*.csv',\n    format = 'csv',\n    parser_version = '2.0',\n    firstrow = 2 )\nWITH (\n    [ID] VARCHAR(200) 1,\n    [Name] VARCHAR(200) 2\n)\nas rows",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"poolName": "Built-in",
+				"databaseName": "iii_DEMO"
+			}
+		},
+		"type": "SqlQuery"
+	}
+}

@@ -1,0 +1,20 @@
+{
+	"name": "Internal DEMO8- Query created Table",
+	"properties": {
+		"description": "Creates a link to an ADL storage account at the powerbi container and Police Subfolder level",
+		"folder": {
+			"name": "Internal Demo Scripts/Serverless SQL 2 - External Tables"
+		},
+		"content": {
+			"query": "\nSELECT * FROM [DemoOutcomes]\nWHERE [Outcome Type] = 'Local Resolution'",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"poolName": "Built-in",
+				"databaseName": "iii_DEMO"
+			}
+		},
+		"type": "SqlQuery"
+	}
+}

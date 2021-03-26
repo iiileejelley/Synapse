@@ -1,0 +1,19 @@
+{
+	"name": "Internal DEMO4 - Create A Database",
+	"properties": {
+		"folder": {
+			"name": "Internal Demo Scripts/Serverless SQL 2 - External Tables"
+		},
+		"content": {
+			"query": "--DROP DATABASE iii_DEMO \n\n--Create a Demo database--\nCREATE DATABASE iii_DEMO \n    COLLATE Latin1_General_100_BIN2_UTF8;\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"poolName": "Built-in",
+				"databaseName": "default"
+			}
+		},
+		"type": "SqlQuery"
+	}
+}

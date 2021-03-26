@@ -1,0 +1,19 @@
+{
+	"name": "RTC DEMO - Create Casualties Dimension",
+	"properties": {
+		"folder": {
+			"name": "Dedicated SQL POOL"
+		},
+		"content": {
+			"query": "DROP TABLE [RTC].[DIM_Casualties] \nCREATE TABLE [RTC].[DIM_Casualties]\nWITH (\n    DISTRIBUTION = HASH (Acc_Index),\n    CLUSTERED COLUMNSTORE INDEX\n) AS \nSELECT DISTINCT (Acc_Index),\n[Vehicle_Reference] as 'Vehicle Reference',\n[Casualty_Reference] as 'Casualty Reference',\ncc.[label] as ' Casualty_Class ' ,\ns.[label] as ' Sex_of_Casualty ' ,\n[Age_of_Casualty] as 'Age of Casualty',\nab.[label] as ' Age_Band_of_Casualty ' ,\ncs.[label] as ' Casualty_Severity ' ,\npl.[label] as ' Pedestrian_Location ' ,\npm.[label] as ' Pedestrian_Movement ' ,\ncp.[label] as ' Car_Passenger ' ,\nbc.[label] as ' Bus_or_Coach_Passenger ' ,\npr.[label] as ' Pedestrian_Road_Maintenance_Worker ' ,\nct.[label] as ' Casualty_Type ' ,\nch.[label] as ' Casualty_Home_Area_Type ' ,\nci.[label] as ' Casualty_IMD_Decile '\nFROM [RTC].[Casualties] a\n LEFT OUTER JOIN RTC.Casualty_Class  cc ON cc.code = a.Casualty_Class \n LEFT OUTER JOIN RTC.Sex_of_Casualty  s ON s.code = a.Sex_of_Casualty \n LEFT OUTER JOIN RTC.Age_Band  ab ON ab.code = a.Age_Band_of_Casualty \n LEFT OUTER JOIN RTC.Casualty_Severity  cs ON cs.code = a.Casualty_Severity \n LEFT OUTER JOIN RTC.Ped_Location  pl ON pl.code = a.Pedestrian_Location \n LEFT OUTER JOIN RTC.Ped_Movement  pm ON pm.code = a.Pedestrian_Movement \n LEFT OUTER JOIN RTC.Car_Passenger  cp ON cp.code = a.Car_Passenger \n LEFT OUTER JOIN RTC.Bus_Passenger  bc ON bc.code = a.Bus_or_Coach_Passenger \n LEFT OUTER JOIN RTC.Ped_Road_Maintenance_Worker  pr ON pr.code = a.Pedestrian_Road_Maintenance_Worker \n LEFT OUTER JOIN RTC.Casualty_Type  ct ON ct.code = a.Casualty_Type \n LEFT OUTER JOIN RTC.Home_Area_Type  ch ON ch.code = a.Casualty_Home_Area_Type \n LEFT OUTER JOIN RTC.IMD_Decile  ci ON ci.code = a.Casualty_IMD_Decile \n WHERE Acc_Index NOT LIKE '%#%'",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"name": "iiisynapseplay",
+				"type": "SqlPool"
+			}
+		},
+		"type": "SqlQuery"
+	}
+}

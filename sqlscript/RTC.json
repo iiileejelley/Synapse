@@ -1,0 +1,19 @@
+{
+	"name": "RTC",
+	"properties": {
+		"folder": {
+			"name": "Misc"
+		},
+		"content": {
+			"query": "CREATE PROC bulk_load_Casualties\nAS\nBEGIN\nCOPY INTO dbo.[Accidents] \nFROM 'https://iiiplaytestgen2.dfs.core.windows.net/powerbi/Synapse_RTC/NonSensitive/*/*/*/dftRoadSafety_Accidents.csv'\n\n WITH (\n     FILE_TYPE = 'CSV'\n     ,CREDENTIAL=(\n\t\t IDENTITY= '256a939e-4a00-4604-b90a-48e035aeafea@https://login.microsoftonline.com/2fbd54d0-77a8-4d23-ae51-dbff9104d65c/oauth2/token' , \n\t \t\tSECRET= 'W7qISt.08b0W3B7IIPuVy_1cF.ByjlHLT.')\n\t\t\t ,FIRSTROW = 2\n\t\t\t \n      );\n      GO\n\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"name": "iiisynapseplay",
+				"type": "SqlPool"
+			}
+		},
+		"type": "SqlQuery"
+	}
+}

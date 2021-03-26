@@ -1,0 +1,19 @@
+{
+	"name": "RTC DEMO -Create Vehicles Tables",
+	"properties": {
+		"folder": {
+			"name": "Dedicated SQL POOL"
+		},
+		"content": {
+			"query": "DROP EXTERNAL TABLE [RTC].[Stg_Vehicles]\nCREATE EXTERNAL TABLE [RTC].[Stg_Vehicles]\n(\t \n[Acc_Index] NVARCHAR(300) NOT NULL,\n[Vehicle_Reference] INT,\n[Vehicle_Type] INT,\n[Towing_and_Articulation] INT,\n[Vehicle_Manoeuvre] INT,\n[Vehicle_Location-Restricted_Lane] INT,\n[Junction_Location] INT,\n[Skidding_and_Overturning] INT,\n[Hit_Object_in_Carriageway] INT,\n[Vehicle_Leaving_Carriageway] INT,\n[Hit_Object_off_Carriageway] INT,\n[1st_Point_of_Impact] INT,\n[Was_Vehicle_Left_Hand_Drive] INT,\n[Journey_Purpose_of_Driver] INT,\n[Sex_of_Driver] INT,\n[Age_of_Driver] INT,\n[Age_Band_of_Driver] INT,\n[Engine_Capacity_(CC)] INT,\n[Propulsion_Code] VARCHAR(3),\n[Age_of_Vehicle] INT,\n[Driver_IMD_Decile] INT,\n[Driver_Home_Area_Type] INT,\n[Vehicle_IMD_Decile] INT\n)\nWITH\n(\n\tLOCATION = '/RTC/NonSensitive/Vehicles/Updated',\n\tDATA_SOURCE = [RTC1],\n\tFILE_FORMAT = [QuotedCsvWithHeader]\n)\nDROP TABLE [RTC].[Vehicles]\nCREATE TABLE [RTC].[Vehicles]\nWITH\n(\n\tDISTRIBUTION = HASH ( [Acc_Index] ),\n\tCLUSTERED COLUMNSTORE INDEX\n)\nAS SELECT DISTINCT * FROM [RTC].[Stg_Vehicles] \nWHERE Acc_Index NOT LIKE '%#'\n\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"name": "iiisynapseplay",
+				"type": "SqlPool"
+			}
+		},
+		"type": "SqlQuery"
+	}
+}

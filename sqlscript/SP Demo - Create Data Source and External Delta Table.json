@@ -1,0 +1,19 @@
+{
+	"name": "SP Demo - Create Data Source and External Delta Table",
+	"properties": {
+		"folder": {
+			"name": "Dedicated SQL POOL"
+		},
+		"content": {
+			"query": "--Set a SubFolder Name--\nDECLARE @SubFolder as varchar(200) \nset @SubFolder = 'OutcomesDeltas' \n\n--Set the folder path to create an external data source--\nDECLARE @fullpath varchar (1000) \nSet @fullpath = 'https://iiileedlgen2test.blob.core.windows.net/powerbi/Police/' + @SubFolder +'/'\n\n--What do you want to name the external data source--\nDECLARE @DataSourceName nvarchar(200)\nSET @DataSourceName =  'OutcomesDeltas'\n\n--For combining statements dynamically, as the normal syntax won't allow a paramater to be passed to the Location--\nDECLARE @CreateStatement nvarchar(1000);  SET @CreateStatement = 'CREATE EXTERNAL DATA SOURCE ' \nDECLARE @LocationStatement varchar(100) Set @LocationStatement = ' WITH ( LOCATION = '  \n\n--Executes the defined script with defined paramaters--\nEXEC (@CreateStatement  + @DataSourceName  + @LocationStatement + '''' + @fullpath + ''') ');  \n\ndeclare @Existingdate datetime\nSet @Existingdate=GETDATE()\n\nDECLARE @DatePath as varchar(200) \nset @DatePath = '''' + CONVERT(varchar,@Existingdate,111) + '/' + '''' \n\nDECLARE @ADLFileLocation varchar (200)\nSET @ADLFileLocation = 'https://iiileedlgen2test.blob.core.windows.net/powerbi/Police/NonSensitive/*/*/*/*avon-and-somerset-outcomes.csv' \n\nDECLARE @TableCreateSql varchar(1000)\nSET @TableCreateSql = \n'CREATE EXTERNAL TABLE [iiiDemo].[' + @SubFolder + '] \n    WITH ( LOCATION =  ' + @DatePath +  ', \n    DATA_SOURCE = [' + @DataSourceName + '], \n    FILE_FORMAT = [QuotedCsvWithHeader]\n) \nAS \nselect *\nfrom OPENROWSET(\n    bulk ' + '''' + @ADLFileLocation + '''' + \n    ', format = ' + '''' +'csv' + '''' +\n    ', parser_version = ' + '''' + '2.0' + '''' +\n    ' ,firstrow = 1 )\nWITH (\n    [Crime ID] VARCHAR(200) COLLATE Latin1_General_BIN2 1,\n    [Month] VARCHAR(200) 2,\n    [Falls Within] VARCHAR(200) 4,\n    [Location] VARCHAR(200) 7,\n    [Outcome Type] VARCHAR(200) 10\n)\nas rows'\n        \nEXEC ( @TableCreateSql )\n\n            ",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"poolName": "Built-in",
+				"databaseName": "iiiDemo"
+			}
+		},
+		"type": "SqlQuery"
+	}
+}

@@ -1,0 +1,26 @@
+{
+	"name": "LS_Police_API",
+	"type": "Microsoft.Synapse/workspaces/linkedservices",
+	"properties": {
+		"type": "RestService",
+		"parameters": {
+			"BaseUrXl": {
+				"type": "String"
+			},
+			"RelativeUrXl": {
+				"type": "String"
+			}
+		},
+		"annotations": [],
+		"typeProperties": {
+			"url": "@{linkedService().BaseUrXl}@{linkedService().RelativeUrXl}",
+			"enableServerCertificateValidation": true,
+			"authenticationType": "Anonymous"
+		},
+		"connectVia": {
+			"referenceName": "AutoResolveIntegrationRuntime",
+			"type": "IntegrationRuntimeReference"
+		},
+		"description": "The police API copied from TEW (so may not work correctly!)"
+	}
+}

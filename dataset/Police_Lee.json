@@ -1,0 +1,24 @@
+{
+	"name": "Police_Lee",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Police Data Lee",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"rel_address": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "RestResource",
+		"typeProperties": {
+			"relativeUrl": {
+				"value": "@dataset().rel_address",
+				"type": "Expression"
+			}
+		},
+		"schema": []
+	},
+	"type": "Microsoft.Synapse/workspaces/datasets"
+}

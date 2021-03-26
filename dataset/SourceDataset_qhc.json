@@ -1,0 +1,21 @@
+{
+	"name": "SourceDataset_qhc",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "NSPL",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "HttpServerLocation"
+			},
+			"compression": {
+				"type": "ZipDeflate",
+				"level": "Fastest"
+			}
+		}
+	},
+	"type": "Microsoft.Synapse/workspaces/datasets"
+}

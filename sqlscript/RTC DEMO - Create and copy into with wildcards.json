@@ -1,0 +1,19 @@
+{
+	"name": "RTC DEMO - Create and copy into with wildcards",
+	"properties": {
+		"folder": {
+			"name": "Dedicated SQL POOL"
+		},
+		"content": {
+			"query": "SET ANSI_NULLS ON\nGO\nSET QUOTED_IDENTIFIER ON\nGO\n\nCREATE TABLE [RTC].[CopyCasualties]\n( \n\t[Acc_Index] [nvarchar](300)  NOT NULL,\n\t[Vehicle_Reference] [int]  NULL,\n\t[Casualty_Reference] [int]  NULL,\n\t[Casualty_Class] [int]  NULL,\n\t[Sex_of_Casualty] [int]  NULL,\n\t[Age_of_Casualty] [int]  NULL,\n\t[Age_Band_of_Casualty] [int]  NULL,\n\t[Casualty_Severity] [int]  NULL,\n\t[Pedestrian_Location] [int]  NULL,\n\t[Pedestrian_Movement] [int]  NULL,\n\t[Car_Passenger] [int]  NULL,\n\t[Bus_or_Coach_Passenger] [int]  NULL,\n\t[Pedestrian_Road_Maintenance_Worker] [int]  NULL,\n\t[Casualty_Type] [int]  NULL,\n\t[Casualty_Home_Area_Type] [int]  NULL,\n\t[Casualty_IMD_Decile] [int]  NULL\n)\nWITH\n(\n\tDISTRIBUTION = HASH ( [Acc_Index] ),\n\tCLUSTERED COLUMNSTORE INDEX\n)\nGO\n\n\n\n\nCOPY INTO [RTC].[CopyCasualties]\n \nFROM 'https://iiiplaytestgen2.dfs.core.windows.net/powerbi/RTC/*/*/*Casualties.csv'\nWITH  \n ( \n FILE_TYPE = 'CSV'\n,FIRSTROW = 2\n)\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"name": "iiisynapseplay",
+				"type": "SqlPool"
+			}
+		},
+		"type": "SqlQuery"
+	}
+}

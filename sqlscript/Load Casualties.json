@@ -1,0 +1,19 @@
+{
+	"name": "Load Casualties",
+	"properties": {
+		"folder": {
+			"name": "Misc"
+		},
+		"content": {
+			"query": "DROP TABLE Casualties\nCREATE TABLE dbo.Casualties\n\t( \n[Acc_Index] VARCHAR(20) NOT NULL,\n[Vehicle_Reference] INT,\n[Casualty_Reference] INT,\n[Casualty_Class] INT,\n[Sex_of_Casualty] INT,\n[Age_Band_of_Casualty] INT,\n[Casualty_Severity] INT,\n[Pedestrian_Location] INT,\n[Pedestrian_Movement] INT,\n[Car_Passenger] INT,\n[Bus_or_Coach_Passenger] INT,\n[Pedestrian_Road_Maintenance_Worker] INT,\n[Casualty_Type] INT,\n[Casualty_Home_Area_Type] INT\n\t)\nWITH\n\t(\n\tDISTRIBUTION = HASH([Acc_Index]),\n\t CLUSTERED COLUMNSTORE INDEX\n\t -- HEAP\n\t)\n\n\n--Uncomment the 4 lines below to create a stored procedure for data pipeline orchestration​                 \n--CREATE PROC bulk_load_Accidents\n--AS\n--BEGIN\nCOPY INTO dbo.[Casualties] \nFROM 'https://iiiplaytestgen2.dfs.core.windows.net/powerbi/Synapse_RTC/NonSensitive/*/*/*/dftRoadSafety_Casualties.csv'\n\n WITH (\n     FILE_TYPE = 'CSV'\n     ,CREDENTIAL=(\n\t\t IDENTITY= '256a939e-4a00-4604-b90a-48e035aeafea@https://login.microsoftonline.com/2fbd54d0-77a8-4d23-ae51-dbff9104d65c/oauth2/token' , \n\t \t\tSECRET= 'W7qISt.08b0W3B7IIPuVy_1cF.ByjlHLT.')\n\t\t\t ,FIRSTROW = 2\n\t\t\t \n      )\n\n--END\nGO\n\nSELECT TOP 100 * FROM Casualties\nGO",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"name": "iiisynapseplay",
+				"type": "SqlPool"
+			}
+		},
+		"type": "SqlQuery"
+	}
+}

@@ -1,0 +1,19 @@
+{
+	"name": "DEMO18 - Dynamic Data Source Creating",
+	"properties": {
+		"folder": {
+			"name": "Misc"
+		},
+		"content": {
+			"query": "--Set a SubFolder Name--\nDECLARE @SubFolder as varchar(200) \nset @SubFolder = 'SPTest/' \n\n--Set the folder path to create an external data source--\nDECLARE @fullpath varchar (1000) \nSet @fullpath = 'https://iiileedlgen2test.blob.core.windows.net/powerbi/Police/' + @SubFolder\n\n--What do you want to name the external data source--\nDECLARE @DataSourceName nvarchar(200)\nSET @DataSourceName =  'SPTesting'\n\n--For combining statements dynamically, as the normal syntax won't allow a paramater to be passed to the Location--\nDECLARE @CreateStatement nvarchar(1000);  \nSET @CreateStatement = 'CREATE EXTERNAL DATA SOURCE ' \n\nDECLARE @LocationStatement varchar(100) \nSet @LocationStatement = ' WITH ( LOCATION = '  \n\nEXEC (@CreateStatement  + @DataSourceName  + @LocationStatement + '''' + @fullpath + ''') ');  \n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"name": "iiiDemo",
+				"type": "SqlOnDemand"
+			}
+		},
+		"type": "SqlQuery"
+	}
+}

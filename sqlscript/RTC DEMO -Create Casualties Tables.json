@@ -1,0 +1,19 @@
+{
+	"name": "RTC DEMO -Create Casualties Tables",
+	"properties": {
+		"folder": {
+			"name": "Dedicated SQL POOL"
+		},
+		"content": {
+			"query": "DROP EXTERNAL TABLE [RTC].[Stg_Casualties]\nCREATE EXTERNAL TABLE [RTC].[Stg_Casualties]\n( \n[Acc_Index] NVARCHAR(300) NOT NULL,\n[Vehicle_Reference] INT,\n[Casualty_Reference] INT,\n[Casualty_Class] INT,\n[Sex_of_Casualty] INT,\n[Age_of_Casualty] INT,\n[Age_Band_of_Casualty] INT,\n[Casualty_Severity] INT,\n[Pedestrian_Location] INT,\n[Pedestrian_Movement] INT,\n[Car_Passenger] INT,\n[Bus_or_Coach_Passenger] INT,\n[Pedestrian_Road_Maintenance_Worker] INT,\n[Casualty_Type] INT,\n[Casualty_Home_Area_Type] INT,\n[Casualty_IMD_Decile] INT\n)\nWITH\n(\n\tLOCATION = '/RTC/NonSensitive/Casualties/Updated',\n\tDATA_SOURCE = [RTC1],\n\tFILE_FORMAT = [QuotedCsvWithHeader]\n)\nDROP TABLE [RTC].[Casualties]\nCREATE TABLE [RTC].[Casualties]\nWITH\n(\n\tDISTRIBUTION = HASH ( [Acc_Index] ),\n\tCLUSTERED COLUMNSTORE INDEX\n)\nAS SELECT CONCAT([Acc_Index], '_', [Casualty_Reference]) AS 'Accident_Key', * FROM [RTC].[Stg_Casualties] \nWHERE Acc_Index NOT LIKE '%#'\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"name": "iiisynapseplay",
+				"type": "SqlPool"
+			}
+		},
+		"type": "SqlQuery"
+	}
+}

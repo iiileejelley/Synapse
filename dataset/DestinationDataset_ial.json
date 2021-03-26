@@ -1,0 +1,17 @@
+{
+	"name": "DestinationDataset_ial",
+	"properties": {
+		"annotations": [],
+		"type": "SqlPoolTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "RTC",
+			"table": "1st_Point_Of_Contact"
+		},
+		"sqlPool": {
+			"referenceName": "iiisynapseplay",
+			"type": "SqlPoolReference"
+		}
+	},
+	"type": "Microsoft.Synapse/workspaces/datasets"
+}

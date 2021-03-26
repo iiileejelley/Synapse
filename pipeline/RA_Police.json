@@ -1,0 +1,63 @@
+{
+	"name": "RA_Police",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy data1",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "RestSource",
+						"httpRequestTimeout": "00:01:40",
+						"requestInterval": "00.00:00:00.010",
+						"requestMethod": "GET"
+					},
+					"sink": {
+						"type": "JsonSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "JsonWriteSettings"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "RA_Police",
+						"type": "DatasetReference",
+						"parameters": {
+							"Rel_URL": "2020-05"
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "RA_Police_JSON",
+						"type": "DatasetReference",
+						"parameters": {
+							"Directory": "RA_Police",
+							"File": "RA_Police.json"
+						}
+					}
+				]
+			}
+		],
+		"folder": {
+			"name": "Misc"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-03-04T14:47:07Z"
+	},
+	"type": "Microsoft.Synapse/workspaces/pipelines"
+}

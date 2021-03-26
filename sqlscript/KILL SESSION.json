@@ -1,0 +1,17 @@
+{
+	"name": "KILL SESSION",
+	"properties": {
+		"description": "Kills a session if it is long running or causing problems. ID's can be picked up from the SQL pool Session ID",
+		"content": {
+			"query": "KILL 'SID5287'",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"name": "iiisynapseplay",
+				"type": "SqlPool"
+			}
+		},
+		"type": "SqlQuery"
+	}
+}

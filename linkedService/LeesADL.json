@@ -1,0 +1,18 @@
+{
+	"name": "LeesADL",
+	"type": "Microsoft.Synapse/workspaces/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "AzureBlobFS",
+		"typeProperties": {
+			"url": "https://iiileedlgen2test.dfs.core.windows.net",
+			"tenant": "2fbd54d0-77a8-4d23-ae51-dbff9104d65c",
+			"servicePrincipalId": "256a939e-4a00-4604-b90a-48e035aeafea",
+			"encryptedCredential": "ew0KICAiVmVyc2lvbiI6ICIyMDE3LTExLTMwIiwNCiAgIlByb3RlY3Rpb25Nb2RlIjogIktleSIsDQogICJTZWNyZXRDb250ZW50VHlwZSI6ICJQbGFpbnRleHQiLA0KICAiQ3JlZGVudGlhbElkIjogIlNZQU5QU0VURVdQTEFZX2YxYTk2ZTI4LWQxMDMtNDYxZC04MTQ4LTk4ODdiODUyOWY0MSINCn0="
+		},
+		"connectVia": {
+			"referenceName": "AutoResolveIntegrationRuntime",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

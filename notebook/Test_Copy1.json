@@ -1,0 +1,135 @@
+{
+	"name": "Test_Copy1",
+	"properties": {
+		"nbformat": 4,
+		"nbformat_minor": 2,
+		"bigDataPool": {
+			"referenceName": "tewTest1",
+			"type": "BigDataPoolReference"
+		},
+		"sessionProperties": {
+			"driverMemory": "28g",
+			"driverCores": 4,
+			"executorMemory": "28g",
+			"executorCores": 4,
+			"numExecutors": 2
+		},
+		"metadata": {
+			"language_info": {
+				"name": "python"
+			},
+			"a365ComputeOptions": {
+				"id": "/subscriptions/bdcb8fa1-3596-4673-af7f-ad635ee9906d/resourceGroups/tim-play-rg1/providers/Microsoft.Synapse/workspaces/syanpsetewplay/bigDataPools/tewTest1",
+				"name": "tewTest1",
+				"type": "Spark",
+				"endpoint": "https://syanpsetewplay.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/tewTest1",
+				"auth": {
+					"type": "AAD",
+					"authResource": "https://dev.azuresynapse.net"
+				},
+				"sparkVersion": "2.4",
+				"nodeCount": 3,
+				"cores": 4,
+				"memory": 28
+			}
+		},
+		"cells": [
+			{
+				"cell_type": "code",
+				"source": [
+					"storageAccountName = \"iiiplaytestgen2\"\n",
+					"appID = \"256a939e-4a00-4604-b90a-48e035aeafea\"\n",
+					"secret = \"W7qISt.08b0W3B7IIPuVy_1cF.ByjlHLT.\"\n",
+					"fileSystemName = \"powerbi\"\n",
+					"tenantID = \"2fbd54d0-77a8-4d23-ae51-dbff9104d65c\"\n",
+					"relative_path = \"Police/NonSensitive/2020/05/01/*outcomes.csv\"\n",
+					"\n",
+					"spark.conf.set(\"fs.azure.account.auth.type.\" + storageAccountName + \".dfs.core.windows.net\", \"OAuth\")\n",
+					"spark.conf.set(\"fs.azure.account.oauth.provider.type.\" + storageAccountName + \".dfs.core.windows.net\", \"org.apache.hadoop.fs.azurebfs.oauth2.ClientCredsTokenProvider\")\n",
+					"spark.conf.set(\"fs.azure.account.oauth2.client.id.\" + storageAccountName + \".dfs.core.windows.net\", \"\" + appID + \"\")\n",
+					"spark.conf.set(\"fs.azure.account.oauth2.client.secret.\" + storageAccountName + \".dfs.core.windows.net\", \"\" + secret + \"\")\n",
+					"spark.conf.set(\"fs.azure.account.oauth2.client.endpoint.\" + storageAccountName + \".dfs.core.windows.net\", \"https://login.microsoftonline.com/\" + tenantID + \"/oauth2/token\")\n",
+					"spark.conf.set(\"fs.azure.createRemoteFileSystemDuringInitialization\", \"true\") \n",
+					"df = spark.read.option(\"header\",True).csv(\"abfss://\" + fileSystemName  + \"@\" + storageAccountName + \".dfs.core.windows.net/\" + relative_path)\n",
+					"# dbutils.fs.ls(\"abfss://\" + fileSystemName  + \"@\" + storageAccountName + \".dfs.core.windows.net/\")\n",
+					"# spark.conf.set(\"fs.azure.createRemoteFileSystemDuringInitialization\", \"false\")\n",
+					"\n",
+					"filePath = \"abfss://\" + fileSystemName  + \"@\" + storageAccountName + \".dfs.core.windows.net/\"\n",
+					"filePath2 = \"abfss://\" + fileSystemName  + \"@\" + storageAccountName + \".dfs.core.windows.net/PoliceRollUp/2020/05/01/\"\n",
+					"filePath3 = \"abfss://\" + fileSystemName  + \"@\" + storageAccountName + \".dfs.core.windows.net/Police/temp/\"\n",
+					"df.show()\n",
+					"df\\\n",
+					"    .repartition(1)\\\n",
+					"    .write\\\n",
+					"    .format(\"com.databricks.spark.csv\")\\\n",
+					"    .option(\"header\",\"true\")\\\n",
+					"    .mode(\"overwrite\")\\\n",
+					"    .save(filePath2)\n",
+					"\n",
+					"\n",
+					"\n",
+					""
+				],
+				"execution_count": 11
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"filePath2 = \"abfss://\" + fileSystemName  + \"@\" + storageAccountName + \".dfs.core.windows.net/PoliceRollUp/2019/01/01/\""
+				],
+				"execution_count": 54
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"filePath2 = \"abfss://\" + fileSystemName  + \"@\" + storageAccountName + \".dfs.core.windows.net/PoliceRollUp/2019/01/01/\""
+				],
+				"execution_count": 17
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"df.show()"
+				],
+				"execution_count": 15
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"#storageAccountName = \"iiileedlgen2test\"\n",
+					"storageAccountName = \"iiiplaytestgen2\"\n",
+					"appID = \"256a939e-4a00-4604-b90a-48e035aeafea\"\n",
+					"secret = \"W7qISt.08b0W3B7IIPuVy_1cF.ByjlHLT.\"\n",
+					"fileSystemName = \"powerbi\"\n",
+					"tenantID = \"2fbd54d0-77a8-4d23-ae51-dbff9104d65c\"\n",
+					"relative_path = \"Police/NonSensitive/2019/01/01/*outcomes.csv\"\n",
+					"\n",
+					"spark.conf.set(\"fs.azure.account.auth.type.\" + storageAccountName + \".dfs.core.windows.net\", \"OAuth\")\n",
+					"spark.conf.set(\"fs.azure.account.oauth.provider.type.\" + storageAccountName + \".dfs.core.windows.net\", \"org.apache.hadoop.fs.azurebfs.oauth2.ClientCredsTokenProvider\")\n",
+					"spark.conf.set(\"fs.azure.account.oauth2.client.id.\" + storageAccountName + \".dfs.core.windows.net\", \"\" + appID + \"\")\n",
+					"spark.conf.set(\"fs.azure.account.oauth2.client.secret.\" + storageAccountName + \".dfs.core.windows.net\", \"\" + secret + \"\")\n",
+					"spark.conf.set(\"fs.azure.account.oauth2.client.endpoint.\" + storageAccountName + \".dfs.core.windows.net\", \"https://login.microsoftonline.com/\" + tenantID + \"/oauth2/token\")\n",
+					"spark.conf.set(\"fs.azure.createRemoteFileSystemDuringInitialization\", \"true\")\n",
+					"df = spark.read.csv(\"abfss://\" + fileSystemName  + \"@\" + storageAccountName + \".dfs.core.windows.net/\" + relative_path)\n",
+					"# dbutils.fs.ls(\"abfss://\" + fileSystemName  + \"@\" + storageAccountName + \".dfs.core.windows.net/\")\n",
+					"# spark.conf.set(\"fs.azure.createRemoteFileSystemDuringInitialization\", \"false\")\n",
+					"\n",
+					"filePath = \"abfss://\" + fileSystemName  + \"@\" + storageAccountName + \".dfs.core.windows.net/\"\n",
+					"filePath2 = \"abfss://\" + fileSystemName  + \"@\" + storageAccountName + \".dfs.core.windows.net/PoliceRollUp/2019/01/01/\"\n",
+					"filePath3 = \"abfss://\" + fileSystemName  + \"@\" + storageAccountName + \".dfs.core.windows.net/Police/temp/\"\n",
+					"df.show()\n",
+					"df\\\n",
+					"    .repartition(1)\\\n",
+					"    .write\\\n",
+					"    .format(\"com.databricks.spark.csv\")\\\n",
+					"    .option(\"header\",\"true\")\\\n",
+					"    .mode(\"overwrite\")\\\n",
+					"    .save(filePath2)\n",
+					"\n",
+					""
+				],
+				"execution_count": 19
+			}
+		]
+	}
+}

@@ -1,0 +1,452 @@
+{
+	"name": "Read CSVs and write to storage",
+	"properties": {
+		"nbformat": 4,
+		"nbformat_minor": 2,
+		"bigDataPool": {
+			"referenceName": "tewTest1",
+			"type": "BigDataPoolReference"
+		},
+		"sessionProperties": {
+			"driverMemory": "28g",
+			"driverCores": 4,
+			"executorMemory": "28g",
+			"executorCores": 4,
+			"numExecutors": 2,
+			"conf": {
+				"spark.dynamicAllocation.enabled": "false",
+				"spark.dynamicAllocation.minExecutors": "2",
+				"spark.dynamicAllocation.maxExecutors": "2"
+			}
+		},
+		"metadata": {
+			"saveOutput": true,
+			"synapse_widget": {
+				"version": "0.1",
+				"state": {
+					"afcb20d6-e9fd-4d20-b123-26bd9fd5e0c2": {
+						"type": "Synapse.DataFrame",
+						"sync_state": {
+							"table": {
+								"rows": [
+									{
+										"Location": "On or near MORTIMER CLOSE",
+										"Latitude": "51.439078",
+										"Longitude": "-0.136520",
+										"Month": "2020-04",
+										"Falls within": "Metropolitan Police Service",
+										"LSOA name": "Lambeth 029A",
+										"Reported by": "Metropolitan Police Service",
+										"Crime ID": "18df22c98094651dff9807b3867e59b3cbe674824b6dc6471110747c6dac59c4",
+										"LSOA code": "E01003116",
+										"Outcome type": "Investigation complete; no suspect identified"
+									},
+									{
+										"Location": "On or near Police Station",
+										"Latitude": "51.494125",
+										"Longitude": "-0.117637",
+										"Month": "2020-04",
+										"Falls within": "Metropolitan Police Service",
+										"LSOA name": "Lambeth 036A",
+										"Reported by": "Metropolitan Police Service",
+										"Crime ID": "db7f50ce96801ba829848a8ee64b47840994387922544a406a480b5607d5c5e3",
+										"LSOA code": "E01003013",
+										"Outcome type": "Investigation complete; no suspect identified"
+									},
+									{
+										"Location": "No location",
+										"Latitude": "null",
+										"Longitude": "null",
+										"Month": "2020-04",
+										"Falls within": "Metropolitan Police Service",
+										"LSOA name": "null",
+										"Reported by": "Metropolitan Police Service",
+										"Crime ID": "597cc4a9bd711b3cbd373259c915803f6995be3dd25ae5262957ed97d48cd424",
+										"LSOA code": "null",
+										"Outcome type": "Investigation complete; no suspect identified"
+									},
+									{
+										"Location": "On or near CAROLINE CLOSE",
+										"Latitude": "51.432283",
+										"Longitude": "-0.117605",
+										"Month": "2020-04",
+										"Falls within": "Metropolitan Police Service",
+										"LSOA name": "Lambeth 030E",
+										"Reported by": "Metropolitan Police Service",
+										"Crime ID": "c4d1f57f40bfe7f1b7caba0d7dcff78ebe10f210529405d6553b743c4e7d29b5",
+										"LSOA code": "E01003154",
+										"Outcome type": "Investigation complete; no suspect identified"
+									},
+									{
+										"Location": "On or near YORK HILL",
+										"Latitude": "51.435380",
+										"Longitude": "-0.107248",
+										"Month": "2020-04",
+										"Falls within": "Metropolitan Police Service",
+										"LSOA name": "Lambeth 028D",
+										"Reported by": "Metropolitan Police Service",
+										"Crime ID": "21bb6f91ac7ea6114b2341a37c8bd7b84f00cbe922226b4d181d519f1f62eff4",
+										"LSOA code": "E01003166",
+										"Outcome type": "Investigation complete; no suspect identified"
+									},
+									{
+										"Location": "No location",
+										"Latitude": "null",
+										"Longitude": "null",
+										"Month": "2020-04",
+										"Falls within": "Metropolitan Police Service",
+										"LSOA name": "null",
+										"Reported by": "Metropolitan Police Service",
+										"Crime ID": "8bca506a0eab2e913c8d33b9d91d223a8b6e349b765f3b920938862fff49cac7",
+										"LSOA code": "null",
+										"Outcome type": "Investigation complete; no suspect identified"
+									},
+									{
+										"Location": "No location",
+										"Latitude": "null",
+										"Longitude": "null",
+										"Month": "2020-04",
+										"Falls within": "Metropolitan Police Service",
+										"LSOA name": "null",
+										"Reported by": "Metropolitan Police Service",
+										"Crime ID": "9e0c589474ac7d31f99ac7af2050575a56404cd5012a673b08283c7b54889508",
+										"LSOA code": "null",
+										"Outcome type": "Investigation complete; no suspect identified"
+									},
+									{
+										"Location": "On or near TOKEN YARD",
+										"Latitude": "51.463622",
+										"Longitude": "-0.215348",
+										"Month": "2020-04",
+										"Falls within": "Metropolitan Police Service",
+										"LSOA name": "Wandsworth 010E",
+										"Reported by": "Metropolitan Police Service",
+										"Crime ID": "0999f67e4a481384aa6eaaba7ecceb98de60bafbc6cb094c87cea9601466f9ee",
+										"LSOA code": "E01004609",
+										"Outcome type": "Investigation complete; no suspect identified"
+									},
+									{
+										"Location": "On or near BOYD CLOSE",
+										"Latitude": "51.418847",
+										"Longitude": "-0.283322",
+										"Month": "2020-04",
+										"Falls within": "Metropolitan Police Service",
+										"LSOA name": "Kingston upon Thames 003C",
+										"Reported by": "Metropolitan Police Service",
+										"Crime ID": "3feb73c26eb8c46469501cd39b4eaca6efd9ae7f04058796d4470f2690babfa3",
+										"LSOA code": "E01002951",
+										"Outcome type": "Investigation complete; no suspect identified"
+									},
+									{
+										"Location": "On or near BAILEY CRESCENT",
+										"Latitude": "51.357943",
+										"Longitude": "-0.313191",
+										"Month": "2020-04",
+										"Falls within": "Metropolitan Police Service",
+										"LSOA name": "Kingston upon Thames 020C",
+										"Reported by": "Metropolitan Police Service",
+										"Crime ID": "ccae9d3510a0a6f87e06351f6821101b92df1f47c98a1c89e49eecf3660bdc4d",
+										"LSOA code": "E01002948",
+										"Outcome type": "Investigation complete; no suspect identified"
+									}
+								],
+								"schema": {
+									"Crime ID": "string",
+									"Month": "string",
+									"Reported by": "string",
+									"Falls within": "string",
+									"Longitude": "string",
+									"Latitude": "string",
+									"Location": "string",
+									"LSOA code": "string",
+									"LSOA name": "string",
+									"Outcome type": "string"
+								}
+							},
+							"isSummary": false,
+							"language": "scala"
+						},
+						"persist_state": {
+							"view": {
+								"type": "details",
+								"chartOptions": {
+									"chartType": "bar",
+									"aggregationType": "count",
+									"categoryFieldKeys": [
+										"Crime ID"
+									],
+									"seriesFieldKeys": [
+										"Crime ID"
+									],
+									"isStacked": false
+								}
+							}
+						}
+					},
+					"e3c5cd9e-4ff0-49de-9009-308c878ff71e": {
+						"type": "Synapse.DataFrame",
+						"sync_state": {
+							"table": {
+								"rows": [
+									{
+										"Location": "On or near Finches Close",
+										"Latitude": "50.824040",
+										"Longitude": "-0.549112",
+										"Month": "2020-05",
+										"Falls within": "Metropolitan Police Service",
+										"LSOA name": "Arun 004D",
+										"Last outcome category": "Under investigation",
+										"Context": "null",
+										"Reported by": "Metropolitan Police Service",
+										"Crime type": "Violence and sexual offences",
+										"Crime ID": "356c879bcf58a98743e1075fd9b7a6b7871a2e6b602c664e3d99f8937319a507",
+										"LSOA code": "E01031467"
+									},
+									{
+										"Location": "On or near The Firs",
+										"Latitude": "51.820056",
+										"Longitude": "-1.046477",
+										"Month": "2020-05",
+										"Falls within": "Metropolitan Police Service",
+										"LSOA name": "Aylesbury Vale 010A",
+										"Last outcome category": "Under investigation",
+										"Context": "null",
+										"Reported by": "Metropolitan Police Service",
+										"Crime type": "Violence and sexual offences",
+										"Crime ID": "02b13743b18df77c3d750f5472f7b9a3ac49a090bd5e6835f75aa373863e1565",
+										"LSOA code": "E01017642"
+									},
+									{
+										"Location": "On or near Beaufort Close",
+										"Latitude": "51.810753",
+										"Longitude": "-0.774910",
+										"Month": "2020-05",
+										"Falls within": "Metropolitan Police Service",
+										"LSOA name": "Aylesbury Vale 017F",
+										"Last outcome category": "Awaiting court outcome",
+										"Context": "null",
+										"Reported by": "Metropolitan Police Service",
+										"Crime type": "Other crime",
+										"Crime ID": "487cfa44c0e9d0cda4fda6015f3549ebf3103a51a02f68d871c6aa9e071d9d4d",
+										"LSOA code": "E01017640"
+									},
+									{
+										"Location": "On or near Police Station",
+										"Latitude": "51.583672",
+										"Longitude": "0.137065",
+										"Month": "2020-05",
+										"Falls within": "Metropolitan Police Service",
+										"LSOA name": "Barking and Dagenham 001A",
+										"Last outcome category": "null",
+										"Context": "null",
+										"Reported by": "Metropolitan Police Service",
+										"Crime type": "Anti-social behaviour",
+										"Crime ID": "null",
+										"LSOA code": "E01000027"
+									},
+									{
+										"Location": "On or near Mead Grove",
+										"Latitude": "51.588063",
+										"Longitude": "0.134947",
+										"Month": "2020-05",
+										"Falls within": "Metropolitan Police Service",
+										"LSOA name": "Barking and Dagenham 001A",
+										"Last outcome category": "null",
+										"Context": "null",
+										"Reported by": "Metropolitan Police Service",
+										"Crime type": "Anti-social behaviour",
+										"Crime ID": "null",
+										"LSOA code": "E01000027"
+									},
+									{
+										"Location": "On or near Mead Grove",
+										"Latitude": "51.588063",
+										"Longitude": "0.134947",
+										"Month": "2020-05",
+										"Falls within": "Metropolitan Police Service",
+										"LSOA name": "Barking and Dagenham 001A",
+										"Last outcome category": "null",
+										"Context": "null",
+										"Reported by": "Metropolitan Police Service",
+										"Crime type": "Anti-social behaviour",
+										"Crime ID": "null",
+										"LSOA code": "E01000027"
+									},
+									{
+										"Location": "On or near Mead Grove",
+										"Latitude": "51.588063",
+										"Longitude": "0.134947",
+										"Month": "2020-05",
+										"Falls within": "Metropolitan Police Service",
+										"LSOA name": "Barking and Dagenham 001A",
+										"Last outcome category": "null",
+										"Context": "null",
+										"Reported by": "Metropolitan Police Service",
+										"Crime type": "Anti-social behaviour",
+										"Crime ID": "null",
+										"LSOA code": "E01000027"
+									},
+									{
+										"Location": "On or near Hatch Grove",
+										"Latitude": "51.582311",
+										"Longitude": "0.140192",
+										"Month": "2020-05",
+										"Falls within": "Metropolitan Police Service",
+										"LSOA name": "Barking and Dagenham 001A",
+										"Last outcome category": "null",
+										"Context": "null",
+										"Reported by": "Metropolitan Police Service",
+										"Crime type": "Anti-social behaviour",
+										"Crime ID": "null",
+										"LSOA code": "E01000027"
+									},
+									{
+										"Location": "On or near Gibbfield Close",
+										"Latitude": "51.587336",
+										"Longitude": "0.135866",
+										"Month": "2020-05",
+										"Falls within": "Metropolitan Police Service",
+										"LSOA name": "Barking and Dagenham 001A",
+										"Last outcome category": "null",
+										"Context": "null",
+										"Reported by": "Metropolitan Police Service",
+										"Crime type": "Anti-social behaviour",
+										"Crime ID": "null",
+										"LSOA code": "E01000027"
+									},
+									{
+										"Location": "On or near Hazel Grove",
+										"Latitude": "51.588442",
+										"Longitude": "0.135860",
+										"Month": "2020-05",
+										"Falls within": "Metropolitan Police Service",
+										"LSOA name": "Barking and Dagenham 001A",
+										"Last outcome category": "null",
+										"Context": "null",
+										"Reported by": "Metropolitan Police Service",
+										"Crime type": "Anti-social behaviour",
+										"Crime ID": "null",
+										"LSOA code": "E01000027"
+									}
+								],
+								"schema": {
+									"Crime ID": "string",
+									"Month": "string",
+									"Reported by": "string",
+									"Falls within": "string",
+									"Longitude": "string",
+									"Latitude": "string",
+									"Location": "string",
+									"LSOA code": "string",
+									"LSOA name": "string",
+									"Crime type": "string",
+									"Last outcome category": "string",
+									"Context": "string"
+								}
+							},
+							"isSummary": false,
+							"language": "scala"
+						},
+						"persist_state": {
+							"view": {
+								"type": "details",
+								"chartOptions": {
+									"chartType": "bar",
+									"aggregationType": "count",
+									"categoryFieldKeys": [
+										"Crime ID"
+									],
+									"seriesFieldKeys": [
+										"Crime ID"
+									],
+									"isStacked": false
+								}
+							}
+						}
+					}
+				}
+			},
+			"kernelspec": {
+				"name": "synapse_pyspark",
+				"display_name": "Synapse PySpark"
+			},
+			"language_info": {
+				"name": "python"
+			},
+			"a365ComputeOptions": {
+				"id": "/subscriptions/bdcb8fa1-3596-4673-af7f-ad635ee9906d/resourceGroups/tim-play-rg1/providers/Microsoft.Synapse/workspaces/syanpsetewplay/bigDataPools/tewTest1",
+				"name": "tewTest1",
+				"type": "Spark",
+				"endpoint": "https://syanpsetewplay.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/tewTest1",
+				"auth": {
+					"type": "AAD",
+					"authResource": "https://dev.azuresynapse.net"
+				},
+				"sparkVersion": "2.4",
+				"nodeCount": 3,
+				"cores": 4,
+				"memory": 28
+			}
+		},
+		"cells": [
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"microsoft": {
+						"language": "python"
+					},
+					"collapsed": false
+				},
+				"source": [
+					"%%pyspark\r\n",
+					"df = spark.read.load('abfss://powerbi@iiiplaytestgen2.dfs.core.windows.net/Police/NonSensitive/*/*/*/*-outcomes.csv', format='csv'\r\n",
+					"## If header exists uncomment line below\r\n",
+					", header=True\r\n",
+					")\r\n",
+					"display(df.limit(10))\r\n",
+					"\r\n",
+					"\r\n",
+					""
+				],
+				"attachments": null,
+				"execution_count": 13
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"collapsed": false
+				},
+				"source": [
+					"df2 = spark.read.load('abfss://powerbi@iiiplaytestgen2.dfs.core.windows.net/Police/NonSensitive/*/*/*/*-street.csv', format='csv'\r\n",
+					"## If header exists uncomment line below\r\n",
+					", header=True\r\n",
+					")\r\n",
+					"display(df2.limit(10))\r\n",
+					"\r\n",
+					"df2.repartition(1).write.format('com.databricks.spark.csv').save(\"abfss://powerbi@iiiplaytestgen2.dfs.core.windows.net/Police/myfile.csv\",header = 'true')\r\n",
+					""
+				],
+				"attachments": null,
+				"execution_count": 15
+			}
+		]
+	}
+}

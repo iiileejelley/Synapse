@@ -1,0 +1,19 @@
+{
+	"name": "Drop Demo Database",
+	"properties": {
+		"folder": {
+			"name": "Internal Demo Scripts"
+		},
+		"content": {
+			"query": "DROP DATABASE iii_DEMO",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"poolName": "Built-in",
+				"databaseName": "default"
+			}
+		},
+		"type": "SqlQuery"
+	}
+}

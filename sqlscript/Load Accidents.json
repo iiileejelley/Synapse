@@ -1,0 +1,19 @@
+{
+	"name": "Load Accidents",
+	"properties": {
+		"folder": {
+			"name": "Misc"
+		},
+		"content": {
+			"query": "DROP TABLE Accidents\nCREATE TABLE dbo.Accidents\n\t( \n\t\t [Accident_Index] VARCHAR(100) NOT NULL,\n[Location_Easting_OSGR] VARCHAR(30),\n[Location_Northing_OSGR] VARCHAR(30),\n[Longitude] VARCHAR(30),\n[Latitude] VARCHAR(30),\n[Police_Force] INT,\n[Accident_Severity] VARCHAR(30),\n[Number_of_Vehicles] INT,\n[Number_of_Casualties] INT,\n[Date] NVARCHAR(400),\n[Day_of_Week] INT,\n[Time] TIME,\n[Local_Authority_(District)] INT,\n[Local_Authority_(Highway)] VARCHAR(20),\n[1st_Road_Class] INT ,\n[1st_Road_Number] INT,\n[Road_Type] INT,\n[Speed_limit] VARCHAR(4) NULL,\n[Junction_Detail] INT,\n[Junction_Control] INT,\n[2nd_Road_Class] INT,\n[2nd_Road_Number] INT,\n[Pedestrian_Crossing-Human_Control] INT,\n[Pedestrian_Crossing-Physical_Facilities] INT,\n[Light_Conditions] INT,\n[Weather_Conditions] INT,\n[Road_Surface_Conditions] INT,\n[Special_Conditions_at_Site] INT,\n[Carriageway_Hazards] NVARCHAR(400),\n[Urban_or_Rural_Area] INT,\n[Did_Police_Officer_Attend_Scene_of_Accident] INT,\n[LSOA_of_Accident_Location] NVARCHAR(400)\n\n\t)\nWITH\n\t(\n\tDISTRIBUTION = HASH([Accident_Index]),\n\t CLUSTERED COLUMNSTORE INDEX\n\t -- HEAP\n\t)\n\n\n--Uncomment the 4 lines below to create a stored procedure for data pipeline orchestration​                 \n--CREATE PROC bulk_load_Accidents\n--AS\n--BEGIN\nCOPY INTO dbo.[Accidents] \nFROM 'https://iiiplaytestgen2.dfs.core.windows.net/powerbi/Synapse_RTC/NonSensitive/*/*/*/dftRoadSafety_Accidents.csv'\n\n WITH (\n     FILE_TYPE = 'CSV'\n     ,CREDENTIAL=[ADLSStorageKey]\n\t\t\t ,FIRSTROW = 2\n\t\t\t \n      )\n\n--END\nGO\n\nSELECT TOP 100 * FROM Accidents\nGO",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"name": "iiisynapseplay",
+				"type": "SqlPool"
+			}
+		},
+		"type": "SqlQuery"
+	}
+}

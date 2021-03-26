@@ -1,0 +1,16 @@
+{
+	"name": "Lee_AdventureWorks",
+	"type": "Microsoft.Synapse/workspaces/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "SqlServer",
+		"typeProperties": {
+			"connectionString": "integrated security=False;data source=TEWSS-019;initial catalog=AdventureWorks2017;user id=test",
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiJlMDA5NjExNi0wNTM4LTRiMmQtOTRlYi03ZTQ3NjFlZGJhNjUiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+		},
+		"connectVia": {
+			"referenceName": "Lee-IR",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

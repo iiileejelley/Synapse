@@ -1,0 +1,19 @@
+{
+	"name": "RTC Demo - Create External Accidents Table from multiple files",
+	"properties": {
+		"folder": {
+			"name": "Dedicated SQL POOL"
+		},
+		"content": {
+			"query": "DROP EXTERNAL TABLE [RTC].[Stg_Accidents]\nCREATE EXTERNAL TABLE [RTC].[Stg_Accidents]\n( \n[Accident_Index] NVARCHAR(300) NOT NULL,\n[Location_Easting_OSGR] VARCHAR(50),\n[Location_Northing_OSGR] VARCHAR(50),\n[Longitude] VARCHAR(50),\n[Latitude] VARCHAR(50),\n[Police_Force] NVARCHAR(50),\n[Accident_Severity] VARCHAR(50),\n[Number_of_Vehicles] NVARCHAR(50),\n[Number_of_Casualties] NVARCHAR(50),\n[Date] VARCHAR(12),\n[Day_of_Week] NVARCHAR(50),\n[Time] NVARCHAR(50),\n[Local_Authority_(District)] NVARCHAR(50),\n[Local_Authority_(Highway)] VARCHAR(50),\n[1st_Road_Class] NVARCHAR(50) ,\n[1st_Road_Number] NVARCHAR(50),\n[Road_Type] NVARCHAR(50),\n[Speed_limit] VARCHAR(20) NULL,\n[Junction_Detail] NVARCHAR(50),\n[Junction_Control] NVARCHAR(50),\n[2nd_Road_Class] NVARCHAR(50),\n[2nd_Road_Number] NVARCHAR(50),\n[Pedestrian_Crossing-Human_Control] NVARCHAR(50),\n[Pedestrian_Crossing-Physical_Facilities] NVARCHAR(50),\n[Light_Conditions] NVARCHAR(50),\n[Weather_Conditions] NVARCHAR(50),\n[Road_Surface_Conditions] NVARCHAR(50),\n[Special_Conditions_at_Site] NVARCHAR(50),\n[Carriageway_Hazards] NVARCHAR(400),\n[Urban_or_Rural_Area] NVARCHAR(50),\n[Did_Police_Officer_Attend_Scene_of_Accident] NVARCHAR(50),\n[LSOA_of_Accident_Location] NVARCHAR(400)\n)\nWITH\n(\n\tLOCATION = '/RTC/NonSensitive/Accidents/Updated',\n\tDATA_SOURCE = [RTC1],\n\tFILE_FORMAT = [QuotedCsvWithHeader],\n\tREJECT_TYPE = VALUE ,\n    REJECT_VALUE = 2000\n)\n\nDROP TABLE [RTC].[Accidents]\nCREATE TABLE [RTC].[Accidents]\nWITH\n(\n\tDISTRIBUTION = HASH ( [Accident_Index] ),\n\tCLUSTERED COLUMNSTORE INDEX\n)\nAS SELECT * FROM [RTC].[Stg_Accidents] \n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"name": "iiisynapseplay",
+				"type": "SqlPool"
+			}
+		},
+		"type": "SqlQuery"
+	}
+}

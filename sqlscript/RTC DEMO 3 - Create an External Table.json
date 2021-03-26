@@ -1,0 +1,19 @@
+{
+	"name": "RTC DEMO 3 - Create an External Table",
+	"properties": {
+		"folder": {
+			"name": "Dedicated SQL POOL"
+		},
+		"content": {
+			"query": "DROP EXTERNAL TABLE [WeatherPicklist]\nCREATE EXTERNAL TABLE [dbo].[WeatherPicklist]\n(\n\t [code] VARCHAR(300) NOT NULL,\n\t [label] VARCHAR(300)\n)\nWITH\n(\n\tLOCATION = '/RTC/NonSensitive/DailyLoads/Weather.csv',\n\tDATA_SOURCE = [RTC],\n\tFILE_FORMAT = [CCSV]\n)\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"poolName": "Built-in",
+				"databaseName": "master"
+			}
+		},
+		"type": "SqlQuery"
+	}
+}

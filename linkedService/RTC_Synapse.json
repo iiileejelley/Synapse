@@ -1,0 +1,12 @@
+{
+	"name": "RTC_Synapse",
+	"type": "Microsoft.Synapse/workspaces/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "PowerBIWorkspace",
+		"typeProperties": {
+			"workspaceID": "118d0ad6-9598-4865-baa6-3aa684d0447f",
+			"tenantID": "2fbd54d0-77a8-4d23-ae51-dbff9104d65c"
+		}
+	}
+}

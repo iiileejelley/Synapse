@@ -1,0 +1,122 @@
+{
+	"name": "Notebook 1",
+	"properties": {
+		"nbformat": 4,
+		"nbformat_minor": 2,
+		"bigDataPool": {
+			"referenceName": "tewTest1",
+			"type": "BigDataPoolReference"
+		},
+		"sessionProperties": {
+			"driverMemory": "28g",
+			"driverCores": 4,
+			"executorMemory": "28g",
+			"executorCores": 4,
+			"numExecutors": 2
+		},
+		"metadata": {
+			"language_info": {
+				"name": "python"
+			},
+			"a365ComputeOptions": {
+				"id": "/subscriptions/bdcb8fa1-3596-4673-af7f-ad635ee9906d/resourceGroups/tim-play-rg1/providers/Microsoft.Synapse/workspaces/syanpsetewplay/bigDataPools/tewTest1",
+				"name": "tewTest1",
+				"type": "Spark",
+				"endpoint": "https://syanpsetewplay.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/tewTest1",
+				"auth": {
+					"type": "AAD",
+					"authResource": "https://dev.azuresynapse.net"
+				},
+				"sparkVersion": "2.4",
+				"nodeCount": 3,
+				"cores": 4,
+				"memory": 28
+			}
+		},
+		"cells": [
+			{
+				"cell_type": "code",
+				"source": [
+					"\n",
+					"source = \"abfss://powerbi@iiiplaytestgen2.dfs.core.windows.net/Police/NonSensitve/2019/01/01\""
+				],
+				"execution_count": 4
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"from pyspark.sql import SparkSession\n",
+					"from pyspark.sql.types import *\n",
+					"account_name = \"iiiplaytestgen2\"\n",
+					"container_name = \"powerbi\"\n",
+					"relative_path = \"Police/NonSensitve/2019/01/01\"\n",
+					"adls_path = 'abfss://%s@%s.dfs.core.windows.net/%s' % (container_name, account_name,  relative_path)\n",
+					"\n",
+					"spark.conf.set(\"fs.azure.account.auth.type.%s.dfs.core.windows.net\" %account_name, \"SharedKey\")\n",
+					"spark.conf.set(\"fs.azure.account.key.%s.dfs.core.windows.net\" %account_name ,\"zZlAZypk2BNZ1Cg9IJticM6DnMsQjn6KjerM7aT8vpd4AYSIV8IZ7ySpZO3BBl9zqF9fLkrA6plbWpobtcfYWQ==\")\n",
+					"\n",
+					""
+				],
+				"execution_count": 19
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"\n",
+					"\n",
+					"configs = {\"fs.azure.account.auth.type\": \"OAuth\",\n",
+					"           \"fs.azure.account.oauth.provider.type\": \"org.apache.hadoop.fs.azurebfs.oauth2.ClientCredsTokenProvider\",\n",
+					"           \"fs.azure.account.oauth2.client.id\": \"<application-id>\",\n",
+					"           \"fs.azure.account.oauth2.client.secret\": dbutils.secrets.get(scope=\"<scope-name>\",key=\"<service-credential-key-name>\"),\n",
+					"           \"fs.azure.account.oauth2.client.endpoint\": \"https://login.microsoftonline.com/<directory-id>/oauth2/token\"}\n",
+					"\n",
+					"# Optionally, you can add <directory-name> to the source URI of your mount point.\n",
+					"dbutils.fs.mount(\n",
+					"  source = \"abfss://<file-system-name>@<storage-account-name>.dfs.core.windows.net/\",\n",
+					"  mount_point = \"/mnt/<mount-name>\",\n",
+					"  extra_configs = configs)"
+				],
+				"execution_count": null
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"%%pyspark\n",
+					"%fs"
+				],
+				"execution_count": null
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"df1 = spark.read.option('header', 'true') \\\n",
+					"                .option('delimiter', ',') \\\n",
+					"                .csv('abfss://powerbi@iiiplaytestgen2.dfs.core.windows.net/Police/NonSensitve/2019/01/01/2019-01-avon-and-somerset-outcomes.csv')"
+				],
+				"execution_count": 21
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"print(adls_path)"
+				],
+				"execution_count": 14
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"#files = [dbutils.fs.ls('source/*outcomes.csv')]\n",
+					"\n",
+					"#tableName = \"*outcomes.csv\"\n",
+					"#filesToCombine = []\n",
+					"#for i in source:\n",
+					"#  for eachTable in glob(source + tableName):\n",
+					"#    filesToCombine.append(eachTable)\n",
+					"    \n",
+					"#print(\"These files will be combined \\n\" + \"\\n\".join(filesToCombine))"
+				],
+				"execution_count": 6
+			}
+		]
+	}
+}

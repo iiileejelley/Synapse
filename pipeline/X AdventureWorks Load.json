@@ -1,0 +1,652 @@
+{
+	"name": "X AdventureWorks Load",
+	"properties": {
+		"description": "Version 3",
+		"activities": [
+			{
+				"name": "Until Today",
+				"type": "Until",
+				"dependsOn": [
+					{
+						"activity": "Set End Date for beginning",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@greaterOrEquals(variables('startDate'),pipeline().parameters.today)",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "Set Start Date For Loop",
+							"description": "makes start date the last end date",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "Delete Empty Files",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "startDate",
+								"value": {
+									"value": "@formatDateTime(variables('endDate'),'yyyy-MM-dd')",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Set Temp End Date For Loop",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "Set Start Date For Loop",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "tempEndDate",
+								"value": {
+									"value": "@formatDateTime(addToTime(variables('startDate'),1,'Year'),'yyyy-MM-dd')",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Copy Table",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "SqlServerSource",
+									"sqlReaderQuery": {
+										"value": "@{pipeline().parameters.SQLQuery}@{replace(replace(pipeline().parameters.WhereAlt,'IDBAPsDate',formatDateTime(variables('startDate'),'yyyyMMdd')),'IDBAPeDate',formatDateTime(variables('endDate'),'yyyyMMdd'))}",
+										"type": "Expression"
+									},
+									"partitionOption": "None"
+								},
+								"sink": {
+									"type": "AzureDataLakeStoreSink"
+								},
+								"enableStaging": false
+							},
+							"inputs": [
+								{
+									"referenceName": "AdventureWorks",
+									"type": "DatasetReference"
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "DataLakeCsv",
+									"type": "DatasetReference",
+									"parameters": {
+										"Directory": {
+											"value": "@pipeline().parameters.Directory",
+											"type": "Expression"
+										},
+										"File": {
+											"value": "@{pipeline().parameters.SensitiveStatus}/@{replace(variables('startDate'),'-','/')}/@{pipeline().parameters.TableName}.csv",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						},
+						{
+							"name": "Set End Date For Loop",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "Set Temp End Date For Loop",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "endDate",
+								"value": {
+									"value": "@if(greater(variables('tempEndDate'),pipeline().parameters.today),pipeline().parameters.today,variables('tempEndDate'))",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Delete Empty Files",
+							"type": "ExecutePipeline",
+							"dependsOn": [
+								{
+									"activity": "Copy Table",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "X DeleteEmptyCSVs",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": false,
+								"parameters": {
+									"NumberOfRows": {
+										"value": "@activity('Copy Table').output.rowsCopied",
+										"type": "Expression"
+									},
+									"File": {
+										"value": "@{pipeline().parameters.SensitiveStatus}/@{replace(variables('startDate'),'-','/')}/@{pipeline().parameters.TableName}.csv",
+										"type": "Expression"
+									},
+									"Directory": {
+										"value": "@pipeline().parameters.Directory",
+										"type": "Expression"
+									},
+									"FileSize": {
+										"value": "@activity('Copy Table').output.dataWritten",
+										"type": "Expression"
+									},
+									"Duration": {
+										"value": "@activity('Copy Table').output.copyDuration",
+										"type": "Expression"
+									},
+									"RunDate": {
+										"value": "@pipeline().TriggerTime",
+										"type": "Expression"
+									},
+									"Start": {
+										"value": "@variables('startDate')",
+										"type": "Expression"
+									},
+									"End": {
+										"value": "@variables('endDate')",
+										"type": "Expression"
+									},
+									"RowsRead": {
+										"value": "@activity('Copy Table').output.rowsRead",
+										"type": "Expression"
+									},
+									"RunType": "Bulk-Yearly"
+								}
+							}
+						},
+						{
+							"name": "Log Failure",
+							"type": "Copy",
+							"dependsOn": [
+								{
+									"activity": "Copy Table",
+									"dependencyConditions": [
+										"Failed"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "SqlServerSource",
+									"sqlReaderQuery": {
+										"value": "SELECT CAST( GETDATE() AS DATE) AS failedDate",
+										"type": "Expression"
+									},
+									"partitionOption": "None"
+								},
+								"sink": {
+									"type": "AzureDataLakeStoreSink"
+								},
+								"enableStaging": false
+							},
+							"inputs": [
+								{
+									"referenceName": "AdventureWorks",
+									"type": "DatasetReference"
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "DataLakeCsv",
+									"type": "DatasetReference",
+									"parameters": {
+										"Directory": {
+											"value": "@pipeline().parameters.Directory",
+											"type": "Expression"
+										},
+										"File": {
+											"value": "iDAPSystemFiles/Failed/@{pipeline().parameters.SensitiveStatus}/@{pipeline().parameters.TableName}.csv",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						},
+						{
+							"name": "Set Start Date to end Loop",
+							"description": "makes start date the last end date",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "Log Failure",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "startDate",
+								"value": "4000-01-01"
+							}
+						},
+						{
+							"name": "Set Start Date to end Loop 2",
+							"description": "makes start date the last end date",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "Log Failure",
+									"dependencyConditions": [
+										"Failed"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "startDate",
+								"value": "4000-01-01"
+							}
+						}
+					],
+					"timeout": "7.00:00:00"
+				}
+			},
+			{
+				"name": "Set End Date for beginning",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Set Temp End Date",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "endDate",
+					"value": {
+						"value": "@if(greater(variables('tempEndDate'),pipeline().parameters.today),pipeline().parameters.today,variables('tempEndDate'))",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Set Temp End Date",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Copy Null Created of modified date",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "tempEndDate",
+					"value": {
+						"value": "@formatDateTime(addToTime(variables('startDate'),1,'Year'),'yyyy-MM-dd')",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Set Start date for year beginning",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Set Start Year",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "startDate",
+					"value": {
+						"value": "@pipeline().parameters.StartDate",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Copy Pre Start Date",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Set Start date for year beginning",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": {
+							"value": "@{pipeline().parameters.SQLQuery}@{replace(pipeline().parameters.LessThanWhere,'IDBAPsDate',formatDateTime(variables('startDate'),'yyyyMMdd'))}",
+							"type": "Expression"
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".txt"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "AdventureWorks",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DataLakeCsv",
+						"type": "DatasetReference",
+						"parameters": {
+							"Directory": {
+								"value": "@pipeline().parameters.Directory",
+								"type": "Expression"
+							},
+							"File": {
+								"value": "@{pipeline().parameters.SensitiveStatus}/@{variables('StartYear')}/01/01/@{pipeline().parameters.TableName}.csv",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			},
+			{
+				"name": "Copy Null Created of modified date",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Copy Pre Start Date",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": {
+							"value": "@{pipeline().parameters.SQLQuery}@{pipeline().parameters.nullWhere}",
+							"type": "Expression"
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".txt"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "AdventureWorks",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DataLakeCsv",
+						"type": "DatasetReference",
+						"parameters": {
+							"Directory": {
+								"value": "@pipeline().parameters.Directory",
+								"type": "Expression"
+							},
+							"File": {
+								"value": "@{pipeline().parameters.SensitiveStatus}/1899/01/01/@{pipeline().parameters.TableName}.csv",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			},
+			{
+				"name": "Set Start Year",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "startYear",
+					"value": {
+						"value": "@string(sub(int(substring(pipeline().parameters.StartDate,0,4)),1))",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Delete Empty Pre Start",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Copy Pre Start Date",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "X DeleteEmptyCSVs",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"NumberOfRows": {
+							"value": "@activity('Copy Pre Start Date').output.rowsCopied",
+							"type": "Expression"
+						},
+						"File": {
+							"value": "@{pipeline().parameters.SensitiveStatus}/@{variables('StartYear')}/01/01/@{pipeline().parameters.TableName}.csv",
+							"type": "Expression"
+						},
+						"Directory": {
+							"value": "@pipeline().parameters.Directory",
+							"type": "Expression"
+						},
+						"FileSize": {
+							"value": "@activity('Copy Pre Start Date').output.dataWritten",
+							"type": "Expression"
+						},
+						"Duration": {
+							"value": "@activity('Copy Pre Start Date').output.copyDuration",
+							"type": "Expression"
+						},
+						"RunDate": {
+							"value": "@activity('Copy Pre Start Date').output.copyDuration",
+							"type": "Expression"
+						},
+						"Start": "1899-01-01",
+						"End": {
+							"value": "@variables('endDate')",
+							"type": "Expression"
+						},
+						"RowsRead": {
+							"value": "@activity('Copy Pre Start Date').output.rowsRead",
+							"type": "Expression"
+						},
+						"RunType": "Bulk-PreStart"
+					}
+				}
+			},
+			{
+				"name": "Delete Empty Null",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Copy Null Created of modified date",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "X DeleteEmptyCSVs",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"NumberOfRows": {
+							"value": "@activity('Copy Null Created of modified date').output.rowsCopied",
+							"type": "Expression"
+						},
+						"File": {
+							"value": "@{pipeline().parameters.SensitiveStatus}/1899/01/01/@{pipeline().parameters.TableName}.csv",
+							"type": "Expression"
+						},
+						"Directory": {
+							"value": "@pipeline().parameters.Directory",
+							"type": "Expression"
+						},
+						"FileSize": {
+							"value": "@activity('Copy Null Created of modified date').output.dataWritten",
+							"type": "Expression"
+						},
+						"Duration": {
+							"value": "@activity('Copy Null Created of modified date').output.copyDuration",
+							"type": "Expression"
+						},
+						"RunDate": {
+							"value": "@pipeline().TriggerTime",
+							"type": "Expression"
+						},
+						"Start": "1899-01-01",
+						"End": "1899-01-01",
+						"RowsRead": {
+							"value": "@activity('Copy Null Created of modified date').output.rowsRead",
+							"type": "Expression"
+						},
+						"RunType": "Bulk-Null"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"StartDate": {
+				"type": "string"
+			},
+			"SensitiveStatus": {
+				"type": "string"
+			},
+			"TableName": {
+				"type": "string"
+			},
+			"Directory": {
+				"type": "string"
+			},
+			"SQLQuery": {
+				"type": "string"
+			},
+			"today": {
+				"type": "string"
+			},
+			"WhereAlt": {
+				"type": "string"
+			},
+			"LessThanWhere": {
+				"type": "string"
+			},
+			"nullWhere": {
+				"type": "string"
+			}
+		},
+		"variables": {
+			"startDate": {
+				"type": "String"
+			},
+			"endDate": {
+				"type": "String"
+			},
+			"tempEndDate": {
+				"type": "String"
+			},
+			"startYear": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "AdventureWorks/CSV"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-03-04T14:48:22Z"
+	},
+	"type": "Microsoft.Synapse/workspaces/pipelines"
+}

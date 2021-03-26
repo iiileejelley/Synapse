@@ -1,0 +1,19 @@
+{
+	"name": "RTC DEMO - Create User_Login_Role",
+	"properties": {
+		"folder": {
+			"name": "Dedicated SQL POOL"
+		},
+		"content": {
+			"query": "CREATE LOGIN [iiiAccessTest] WITH PASSWORD = 'iiiTestUser123456!';\nGO\n\nCREATE USER [iiiAccessTest]\n\tFOR LOGIN [iiiAccessTest]\n\tWITH DEFAULT_SCHEMA = RTC\n--GO\n\n --Add user to the database reader role\nEXECUTE sp_addrolemember  @rolename =  N'db_datareader',  @membername =  N'iiiAccessTest'  ",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"name": "iiisynapseplay",
+				"type": "SqlPool"
+			}
+		},
+		"type": "SqlQuery"
+	}
+}

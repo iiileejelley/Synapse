@@ -1,0 +1,13 @@
+{
+	"name": "SourceDataset_neg",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Lee_AdventureWorks",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": []
+	},
+	"type": "Microsoft.Synapse/workspaces/datasets"
+}

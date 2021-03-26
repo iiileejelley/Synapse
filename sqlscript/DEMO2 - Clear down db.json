@@ -1,0 +1,19 @@
+{
+	"name": "DEMO2 - Clear down db",
+	"properties": {
+		"folder": {
+			"name": "Misc"
+		},
+		"content": {
+			"query": "if db_name() = 'master'\n    throw 50001, 'This script cannot be executed in master database. Create new database and run the script there.', 1;\n\nif SERVERPROPERTY('EngineEdition') <> 11\n    throw 50001, 'This script must be executed on Azure Synapse - SQL serverless endpoint.', 1;\n\n------------------------------------------------------------------------------------------\n--      Part 1 - Cleanup script\n--      This part removes objects from sample database\n------------------------------------------------------------------------------------------\nDROP VIEW IF EXISTS dbo.LocalResolutions\nGO\nDROP VIEW IF EXISTS json.Books\nGO\nDROP VIEW IF EXISTS csv.YellowTaxi\nGO\nIF (EXISTS(SELECT * FROM sys.external_tables WHERE name = 'RTC_Accidents')) BEGIN\n    DROP EXTERNAL TABLE csv.Population\nEND\nIF (EXISTS(SELECT * FROM sys.external_file_formats WHERE name = 'QuotedCsvWithHeader')) BEGIN\n    DROP EXTERNAL FILE FORMAT QuotedCsvWithHeader\nEND\nGO\nIF (EXISTS(SELECT * FROM sys.external_file_formats WHERE name = 'QuotedCsvWithoutHeader')) BEGIN\n    DROP EXTERNAL FILE FORMAT QuotedCsvWithoutHeader\nEND\nGO\nIF (EXISTS(SELECT * FROM sys.external_file_formats WHERE name = 'NativeParquet')) BEGIN\n    DROP EXTERNAL FILE FORMAT NativeParquet\nEND\nGO\nDROP SCHEMA IF EXISTS parquet;\nGO\nDROP SCHEMA IF EXISTS csv;\nGO\nDROP SCHEMA IF EXISTS json;\nGO\n\n/*IF (EXISTS(SELECT * FROM sys.external_data_sources WHERE name = 'RTC')) BEGIN\n    DROP EXTERNAL DATA SOURCE SqlOnDemandDemo\nEND\n\n\nIF NOT EXISTS (SELECT * FROM sys.symmetric_keys) BEGIN\n    declare @pasword nvarchar(400) = CAST(newid() as VARCHAR(400));\n    EXEC('CREATE MASTER KEY ENCRYPTION BY PASSWORD = ''' + @pasword + '''')\nEND\n\nIF EXISTS\n   (SELECT * FROM sys.credentials\n   WHERE name = 'https://sqlondemandstorage.blob.core.windows.net')\n   DROP CREDENTIAL [https://sqlondemandstorage.blob.core.windows.net]\nGO\n\nIF EXISTS\n   (SELECT * FROM sys.database_scoped_credentials\n   WHERE name = 'sqlondemand')\n   DROP DATABASE SCOPED CREDENTIAL [sqlondemand]\nGO\n\nIF EXISTS\n   (SELECT * FROM sys.database_scoped_credentials\n   WHERE name = 'WorkspaceIdentity')\n   DROP DATABASE SCOPED CREDENTIAL [WorkspaceIdentity]\nGO*/",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"poolName": "Built-in",
+				"databaseName": "iiiBristolDemo"
+			}
+		},
+		"type": "SqlQuery"
+	}
+}

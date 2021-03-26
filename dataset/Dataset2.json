@@ -1,0 +1,19 @@
+{
+	"name": "Dataset2",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "syanpsetewplay-WorkspaceDefaultSqlServer",
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"DBName": "iiisynapseplay"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlDWTable",
+		"schema": [],
+		"typeProperties": {
+			"tableName": "RTC.1st_Road_Class"
+		}
+	},
+	"type": "Microsoft.Synapse/workspaces/datasets"
+}

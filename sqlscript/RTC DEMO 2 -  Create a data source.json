@@ -1,0 +1,19 @@
+{
+	"name": "RTC DEMO 2 -  Create a data source",
+	"properties": {
+		"folder": {
+			"name": "Dedicated SQL POOL"
+		},
+		"content": {
+			"query": "\nCREATE EXTERNAL DATA SOURCE RTC\nWITH\n  -- Please note the abfss endpoint when your account has secure transfer enabled\n  ( LOCATION = 'abfss://iiiplaytestgen2.blob.core.windows.net/powerbi/', \n    CREDENTIAL = ADLS_credential,\n    TYPE = HADOOP\n) \n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"poolName": "iiisynapseplay",
+				"databaseName": "iiisynapseplay"
+			}
+		},
+		"type": "SqlQuery"
+	}
+}

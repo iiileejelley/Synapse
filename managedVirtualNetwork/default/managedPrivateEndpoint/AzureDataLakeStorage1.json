@@ -1,0 +1,7 @@
+{
+	"name": "AzureDataLakeStorage1",
+	"properties": {
+		"privateLinkResourceId": "/subscriptions/bdcb8fa1-3596-4673-af7f-ad635ee9906d/resourceGroups/iii-play-rg1/providers/Microsoft.Storage/storageAccounts/iiiplaytestgen2",
+		"groupId": "dfs"
+	}
+}

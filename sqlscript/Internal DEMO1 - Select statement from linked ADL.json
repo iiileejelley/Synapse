@@ -1,0 +1,20 @@
+{
+	"name": "Internal DEMO1 - Select statement from linked ADL",
+	"properties": {
+		"description": "Creates a link to an ADL storage account at the powerbi container and Police Subfolder level",
+		"folder": {
+			"name": "Internal Demo Scripts/Serverless SQL 1 - Queries"
+		},
+		"content": {
+			"query": "\nselect *\nfrom openrowset(\n    bulk 'https://iiiplaytestgen2.blob.core.windows.net/powerbi/Police/NonSensitive/2020/01/*/*avon-and-somerset-outcomes.csv',\n    format = 'csv',\n    parser_version = '2.0',\n    firstrow = 1 ) as rows",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"poolName": "Built-in",
+				"databaseName": "default"
+			}
+		},
+		"type": "SqlQuery"
+	}
+}

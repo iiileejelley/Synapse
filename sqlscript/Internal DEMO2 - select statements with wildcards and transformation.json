@@ -1,0 +1,20 @@
+{
+	"name": "Internal DEMO2 - select statements with wildcards and transformation",
+	"properties": {
+		"description": "Creates a link to an ADL storage account at the powerbi container and Police Subfolder level",
+		"folder": {
+			"name": "Internal Demo Scripts/Serverless SQL 1 - Queries"
+		},
+		"content": {
+			"query": "\n--Select all avon and somerset outcomes files in the 2019 Non Sensitive folders and define column types and names --\nselect *\nfrom openrowset(\n    bulk 'https://iiiplaytestgen2.blob.core.windows.net/powerbi/Police/NonSensitive/2020/*/*/*avon-and-somerset-outcomes.csv',\n    format = 'csv',\n    parser_version = '2.0',\n    firstrow = 1 )\nWITH (\n    \n    [Crime ID] VARCHAR(200)  1,\n    [Month] VARCHAR(200) 2,\n    [Falls Within] VARCHAR(200) 4,\n    [Location] VARCHAR(200) 7,\n    [Outcome Type] VARCHAR(200) 10\n)\nas rows",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"poolName": "Built-in",
+				"databaseName": "default"
+			}
+		},
+		"type": "SqlQuery"
+	}
+}

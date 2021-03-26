@@ -1,0 +1,10 @@
+{
+	"name": "synapse-ws-sqlOnDemand--syanpsetewplay",
+	"properties": {
+		"privateLinkResourceId": "/subscriptions/bdcb8fa1-3596-4673-af7f-ad635ee9906d/resourceGroups/tim-play-rg1/providers/Microsoft.Synapse/workspaces/syanpsetewplay",
+		"groupId": "sqlOnDemand",
+		"fqdns": [
+			"syanpsetewplay-ondemand.sql.azuresynapse.net"
+		]
+	}
+}

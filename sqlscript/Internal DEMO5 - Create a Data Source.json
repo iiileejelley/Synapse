@@ -1,0 +1,20 @@
+{
+	"name": "Internal DEMO5 - Create a Data Source",
+	"properties": {
+		"description": "Creates a link to an ADL storage account at the powerbi container and Police Subfolder level",
+		"folder": {
+			"name": "Internal Demo Scripts/Serverless SQL 2 - External Tables"
+		},
+		"content": {
+			"query": "--DROP EXTERNAL DATA SOURCE DataLakePolice\n\n--Creates an external data source, this doesn't write any data, it just links the folder specfified in azure storage as the root destination--\nCREATE EXTERNAL DATA SOURCE DataLakePolice\nWITH ( LOCATION = 'https://iiiplaytestgen2.blob.core.windows.net/powerbi/Police/')\nGO",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"poolName": "Built-in",
+				"databaseName": "iii_DEMO"
+			}
+		},
+		"type": "SqlQuery"
+	}
+}

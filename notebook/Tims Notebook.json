@@ -1,0 +1,104 @@
+{
+	"name": "Tims Notebook",
+	"properties": {
+		"nbformat": 4,
+		"nbformat_minor": 2,
+		"bigDataPool": {
+			"referenceName": "tewTest1",
+			"type": "BigDataPoolReference"
+		},
+		"sessionProperties": {
+			"driverMemory": "28g",
+			"driverCores": 4,
+			"executorMemory": "28g",
+			"executorCores": 4,
+			"numExecutors": 2
+		},
+		"metadata": {
+			"language_info": {
+				"name": "python"
+			},
+			"a365ComputeOptions": {
+				"id": "/subscriptions/bdcb8fa1-3596-4673-af7f-ad635ee9906d/resourceGroups/tim-play-rg1/providers/Microsoft.Synapse/workspaces/syanpsetewplay/bigDataPools/tewTest1",
+				"name": "tewTest1",
+				"type": "Spark",
+				"endpoint": "https://syanpsetewplay.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/tewTest1",
+				"auth": {
+					"type": "AAD",
+					"authResource": "https://dev.azuresynapse.net"
+				},
+				"sparkVersion": "2.4",
+				"nodeCount": 3,
+				"cores": 4,
+				"memory": 28,
+				"extraHeader": null
+			}
+		},
+		"cells": [
+			{
+				"cell_type": "markdown",
+				"source": [
+					"## Connection code snippet taken from ## Connection code snippet taken from\n",
+					"https://docs.microsoft.com/en-us/azure/synapse-analytics/spark/apache-spark-development-using-notebooks#read-a-csv-from-azure-data-lake-store-gen2-as-a-spark-dataframe\n",
+					""
+				]
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"from pyspark.sql import SparkSession\n",
+					"from pyspark.sql.types import *\n",
+					"account_name = \"timplayadlsgen2\"\n",
+					"container_name = \"iii-idap\"\n",
+					"relative_path = \"PoliceAPI\"\n",
+					"adls_path = 'abfss://%s@%s.dfs.core.windows.net/%s' % (container_name, account_name, relative_path)\n",
+					"\n",
+					"spark.conf.set(\"fs.azure.account.auth.type.%s.dfs.core.windows.net\" %account_name, \"SharedKey\")\n",
+					"spark.conf.set(\"fs.azure.account.key.%s.dfs.core.windows.net\" %account_name ,\"aAsfAKRTt/tV+uNPMwKZpARpGp/CgFbBieWwRCP1qH7BcUC5IL1Hz/Dt3enbBaBpb1LOuaYNYImOEo8RDn34CQ==\")\n",
+					"\n",
+					"df1 = spark.read.option('header', 'true') \\\n",
+					"                .option('delimiter', ',') \\\n",
+					"                .csv(adls_path + '/PoliceStops2020-06-17T19_53_03.6867380Z')"
+				],
+				"execution_count": 4
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"df1.show() \n",
+					""
+				],
+				"execution_count": 7
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"df2 = df1.select('_c0')\n",
+					"df2.show()"
+				],
+				"execution_count": 14
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"df2.repartition(1).write.saveAsTable('TimsTable')"
+				],
+				"execution_count": 16
+			},
+			{
+				"cell_type": "markdown",
+				"source": [
+					"**## Problem 1 - How to write out the file with a useful name! **\n",
+					""
+				]
+			},
+			{
+				"cell_type": "markdown",
+				"source": [
+					"## Problem 2 - How to Move the file to the location (may be possible in the previosu issue)\n",
+					""
+				]
+			}
+		]
+	}
+}

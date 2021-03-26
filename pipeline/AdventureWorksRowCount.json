@@ -1,0 +1,74 @@
+{
+	"name": "AdventureWorksRowCount",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy_neg",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [
+					{
+						"name": "Source",
+						"value": "."
+					},
+					{
+						"name": "Destination",
+						"value": "powerbi/AdventureWorks/iDAPConfigFiles/AdventureWorksPK"
+					}
+				],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": "Select 'ASC_ClientPersonIDMask' as Tablename, count(*) as row_count from \"dbo\".\"ASC_ClientPersonIDMask\"\n union all Select 'AWBuildVersion' as Tablename, count(*) as row_count from \"dbo\".\"AWBuildVersion\"\n union all Select 'EmployeePayHistory' as Tablename, count(*) as row_count from \"dbo\".\"EmployeePayHistory\"\n union all Select 'ErrorLog' as Tablename, count(*) as row_count from \"dbo\".\"ErrorLog\"\n union all Select 'Illustration' as Tablename, count(*) as row_count from \"dbo\".\"Illustration\"\n union all Select 'JobCandidate' as Tablename, count(*) as row_count from \"dbo\".\"JobCandidate\"\n union all Select 'Location' as Tablename, count(*) as row_count from \"dbo\".\"Location\"\n union all Select 'Password' as Tablename, count(*) as row_count from \"dbo\".\"Password\"\n union all Select 'Person' as Tablename, count(*) as row_count from \"dbo\".\"Person\"\n union all Select 'PersonCreditCard' as Tablename, count(*) as row_count from \"dbo\".\"PersonCreditCard\"\n union all Select 'PersonPhone' as Tablename, count(*) as row_count from \"dbo\".\"PersonPhone\"\n union all Select 'PhoneNumberType' as Tablename, count(*) as row_count from \"dbo\".\"PhoneNumberType\"\n union all Select 'Product' as Tablename, count(*) as row_count from \"dbo\".\"Product\"\n union all Select 'ProductCategory' as Tablename, count(*) as row_count from \"dbo\".\"ProductCategory\"\n union all Select 'ProductCostHistory' as Tablename, count(*) as row_count from \"dbo\".\"ProductCostHistory\"\n union all Select 'ProductDescription' as Tablename, count(*) as row_count from \"dbo\".\"ProductDescription\"\n union all Select 'ProductDocument' as Tablename, count(*) as row_count from \"dbo\".\"ProductDocument\"\n union all Select 'SalesOrderHeaderSalesReason' as Tablename, count(*) as row_count from \"dbo\".\"SalesOrderHeaderSalesReason\"\n union all Select 'SalesPerson' as Tablename, count(*) as row_count from \"dbo\".\"SalesPerson\"\n union all Select 'SalesPersonQuotaHistory' as Tablename, count(*) as row_count from \"dbo\".\"SalesPersonQuotaHistory\"\n union all Select 'SalesReason' as Tablename, count(*) as row_count from \"dbo\".\"SalesReason\"\n union all Select 'SalesTaxRate' as Tablename, count(*) as row_count from \"dbo\".\"SalesTaxRate\"\n union all Select 'SalesTerritory' as Tablename, count(*) as row_count from \"dbo\".\"SalesTerritory\"\n union all Select 'SalesTerritoryHistory' as Tablename, count(*) as row_count from \"dbo\".\"SalesTerritoryHistory\"\n union all Select 'ScrapReason' as Tablename, count(*) as row_count from \"dbo\".\"ScrapReason\"\n union all Select 'Shift' as Tablename, count(*) as row_count from \"dbo\".\"Shift\"\n union all Select 'ShipMethod' as Tablename, count(*) as row_count from \"dbo\".\"ShipMethod\"\n union all Select 'ShoppingCartItem' as Tablename, count(*) as row_count from \"dbo\".\"ShoppingCartItem\"\n union all Select 'Department' as Tablename, count(*) as row_count from \"HumanResources\".\"Department\"\n union all Select 'Employee' as Tablename, count(*) as row_count from \"HumanResources\".\"Employee\"\n union all Select 'EmployeeDepartmentHistory' as Tablename, count(*) as row_count from \"HumanResources\".\"EmployeeDepartmentHistory\"\n union all Select 'Address' as Tablename, count(*) as row_count from \"Person\".\"Address\"\n union all Select 'AddressType' as Tablename, count(*) as row_count from \"Person\".\"AddressType\"\n union all Select 'BusinessEntity' as Tablename, count(*) as row_count from \"Person\".\"BusinessEntity\"\n union all Select 'BusinessEntityAddress' as Tablename, count(*) as row_count from \"Person\".\"BusinessEntityAddress\"\n union all Select 'BusinessEntityContact' as Tablename, count(*) as row_count from \"Person\".\"BusinessEntityContact\"\n union all Select 'ContactType' as Tablename, count(*) as row_count from \"Person\".\"ContactType\"\n union all Select 'CountryRegion' as Tablename, count(*) as row_count from \"Person\".\"CountryRegion\"\n union all Select 'EmailAddress' as Tablename, count(*) as row_count from \"Person\".\"EmailAddress\"\n union all Select 'StateProvince' as Tablename, count(*) as row_count from \"Person\".\"StateProvince\"\n union all Select 'BillOfMaterials' as Tablename, count(*) as row_count from \"Production\".\"BillOfMaterials\"\n union all Select 'Culture' as Tablename, count(*) as row_count from \"Production\".\"Culture\"\n union all Select 'Document' as Tablename, count(*) as row_count from \"Production\".\"Document\"\n union all Select 'ProductInventory' as Tablename, count(*) as row_count from \"Production\".\"ProductInventory\"\n union all Select 'ProductListPriceHistory' as Tablename, count(*) as row_count from \"Production\".\"ProductListPriceHistory\"\n union all Select 'ProductModel' as Tablename, count(*) as row_count from \"Production\".\"ProductModel\"\n union all Select 'ProductModelIllustration' as Tablename, count(*) as row_count from \"Production\".\"ProductModelIllustration\"\n union all Select 'ProductModelProductDescriptionCulture' as Tablename, count(*) as row_count from \"Production\".\"ProductModelProductDescriptionCulture\"\n union all Select 'ProductPhoto' as Tablename, count(*) as row_count from \"Production\".\"ProductPhoto\"\n union all Select 'ProductProductPhoto' as Tablename, count(*) as row_count from \"Production\".\"ProductProductPhoto\"\n union all Select 'ProductReview' as Tablename, count(*) as row_count from \"Production\".\"ProductReview\"\n union all Select 'ProductSubcategory' as Tablename, count(*) as row_count from \"Production\".\"ProductSubcategory\"\n union all Select 'TransactionHistory' as Tablename, count(*) as row_count from \"Production\".\"TransactionHistory\"\n union all Select 'TransactionHistoryArchive' as Tablename, count(*) as row_count from \"Production\".\"TransactionHistoryArchive\"\n union all Select 'UnitMeasure' as Tablename, count(*) as row_count from \"Production\".\"UnitMeasure\"\n union all Select 'WorkOrder' as Tablename, count(*) as row_count from \"Production\".\"WorkOrder\"\n union all Select 'WorkOrderRouting' as Tablename, count(*) as row_count from \"Production\".\"WorkOrderRouting\"\n union all Select 'ProductVendor' as Tablename, count(*) as row_count from \"Purchasing\".\"ProductVendor\"\n union all Select 'PurchaseOrderDetail' as Tablename, count(*) as row_count from \"Purchasing\".\"PurchaseOrderDetail\"\n union all Select 'PurchaseOrderHeader' as Tablename, count(*) as row_count from \"Purchasing\".\"PurchaseOrderHeader\"\n union all Select 'Vendor' as Tablename, count(*) as row_count from \"Purchasing\".\"Vendor\"\n union all Select 'CountryRegionCurrency' as Tablename, count(*) as row_count from \"Sales\".\"CountryRegionCurrency\"\n union all Select 'CreditCard' as Tablename, count(*) as row_count from \"Sales\".\"CreditCard\"\n union all Select 'Currency' as Tablename, count(*) as row_count from \"Sales\".\"Currency\"\n union all Select 'CurrencyRate' as Tablename, count(*) as row_count from \"Sales\".\"CurrencyRate\"\n union all Select 'Customer' as Tablename, count(*) as row_count from \"Sales\".\"Customer\"\n union all Select 'SalesOrderDetail' as Tablename, count(*) as row_count from \"Sales\".\"SalesOrderDetail\"\n union all Select 'SalesOrderHeader' as Tablename, count(*) as row_count from \"Sales\".\"SalesOrderHeader\"\n union all Select 'SpecialOffer' as Tablename, count(*) as row_count from \"Sales\".\"SpecialOffer\"\n union all Select 'SpecialOfferProduct' as Tablename, count(*) as row_count from \"Sales\".\"SpecialOfferProduct\"\n union all Select 'Store' as Tablename, count(*) as row_count from \"Sales\".\"Store\"\n",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".txt"
+						}
+					},
+					"enableStaging": false,
+					"validateDataConsistency": true,
+					"logStorageSettings": {
+						"linkedServiceName": {
+							"referenceName": "AzureBlobStorage1",
+							"type": "LinkedServiceReference"
+						},
+						"path": "iii"
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "SourceDataset_neg",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DestinationDataset_neg",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"folder": {
+			"name": "Misc"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-03-04T14:47:34Z"
+	},
+	"type": "Microsoft.Synapse/workspaces/pipelines"
+}
